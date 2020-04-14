@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: MonginisWebApi
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: ats-12
+Implementation-Vendor-Id: webapi
+Build-Jdk: 1.8.0_171
+Implementation-URL: http://projects.spring.io/spring-boot/MonginisWebA
+ pi/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
