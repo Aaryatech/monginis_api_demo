@@ -135,7 +135,12 @@ public class SalesDashboardController {
 			@RequestParam String toDate,@RequestParam int catId) throws ParseException, JsonParseException, JsonMappingException, IOException {
 		List<SubCatListByCat> catList = new ArrayList<>();
 
-		catList = subCatListByCatRepo.getSubCatAmtByCat(fromDate, toDate,catId);
+		if(catId!=5) {
+			catList = subCatListByCatRepo.getSubCatAmtByCat(fromDate, toDate,catId);	
+		}else {
+			catList = subCatListByCatRepo.getSubCatAmtByCatSpCake(fromDate, toDate);
+		}
+		
 
 		if (catList == null) {
 			catList = new ArrayList<>();
