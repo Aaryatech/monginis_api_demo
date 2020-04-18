@@ -50,6 +50,9 @@ public class DashboardData {
 	@Column(name = "credit_note")
 	private float creditNote;
 
+	@Column(name = "target")
+	private float target;
+	
 	public int getFrId() {
 		return frId;
 	}
@@ -154,13 +157,21 @@ public class DashboardData {
 		this.creditNote = creditNote;
 	}
 
+	public float getTarget() {
+		return target;
+	}
+
+	public void setTarget(float target) {
+		this.target = target;
+	}
+
 	@Override
 	public String toString() {
 		return "DashboardData [frId=" + frId + ", totalSell=" + totalSell + ", spCakeTotalBill=" + spCakeTotalBill
 				+ ", spCakeTotalBook=" + spCakeTotalBook + ", spCakeGrandTotalBook=" + spCakeGrandTotalBook
 				+ ", cashAmt=" + cashAmt + ", cardAmt=" + cardAmt + ", grnReqAmt=" + grnReqAmt + ", grnReqAmmt="
 				+ grnReqAmmt + ", grnAprAmt=" + grnAprAmt + ", grnAprAmmt=" + grnAprAmmt + ", purchaseBill="
-				+ purchaseBill + ", creditNote=" + creditNote + "]";
+				+ purchaseBill + ", creditNote=" + creditNote + ", target=" + target + "]";
 	}
 	
 	

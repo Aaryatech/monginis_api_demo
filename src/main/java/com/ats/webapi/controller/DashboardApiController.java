@@ -26,27 +26,28 @@ public class DashboardApiController {
 
 	@Autowired
 	DashboardDataRepo dashboardDataRepo;
-	
+
 	@Autowired
 	DateWiseDashboardGraphQueryRepo dateWiseDashboardGraphQueryRepo;
-	
+
 	@Autowired
 	CatWiseDashboardQueryRepo catWiseDashboardQueryRepo;
 
 	@RequestMapping(value = "/getDashboardData", method = RequestMethod.POST)
 	public @ResponseBody DashboardData getDashboardData(@RequestParam("frId") int frId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("month") int month, @RequestParam("year") int year) {
 		DashboardData dashboardData = new DashboardData();
 		try {
 
-			dashboardData = dashboardDataRepo.getDashboardData(fromDate, toDate, frId);
+			dashboardData = dashboardDataRepo.getDashboardData(fromDate, toDate, frId,month,year);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return dashboardData;
 	}
-	
+
 	@RequestMapping(value = "/dateWiseDashboardGraphQuery", method = RequestMethod.POST)
 	public @ResponseBody List<DateWiseDashboardGraphQuery> dateWiseDashboardGraphQuery(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
@@ -60,7 +61,7 @@ public class DashboardApiController {
 		}
 		return list;
 	}
-	
+
 	@RequestMapping(value = "/catWiseDashboardQuery", method = RequestMethod.POST)
 	public @ResponseBody List<CatWiseDashboardQuery> catWiseDashboardQuery(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
