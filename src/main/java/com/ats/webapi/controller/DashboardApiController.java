@@ -14,6 +14,7 @@ import com.ats.webapi.model.CatWiseDashboardQuery;
 import com.ats.webapi.model.CustomerListForDash;
 import com.ats.webapi.model.DashboardData;
 import com.ats.webapi.model.DateWiseDashboardGraphQuery;
+import com.ats.webapi.model.GetDataForLineChart;
 import com.ats.webapi.model.GetItemListForDashboardByCatId;
 import com.ats.webapi.model.dailysales.DailySalesRegular;
 import com.ats.webapi.model.dailysales.DailySalesReportDao;
@@ -22,6 +23,7 @@ import com.ats.webapi.repo.CatWiseDashboardQueryRepo;
 import com.ats.webapi.repo.DashboardDataRepo;
 import com.ats.webapi.repo.DateWiseDashboardGraphQueryRepo;
 import com.ats.webapi.repository.CustomerListForDashRepo;
+import com.ats.webapi.repository.GetDataForLineChartRepo;
 import com.ats.webapi.repository.GetItemListForDashboardByCatIdRepo;
 import com.ats.webapi.repository.dailysales.DailySpSalesRepository;
 
@@ -42,6 +44,9 @@ public class DashboardApiController {
 
 	@Autowired
 	CustomerListForDashRepo customerListForDashRepo;
+	
+	@Autowired
+	GetDataForLineChartRepo getDataForLineChartRepo;
 
 	@RequestMapping(value = "/getDashboardData", method = RequestMethod.POST)
 	public @ResponseBody DashboardData getDashboardData(@RequestParam("frId") int frId,
@@ -123,6 +128,28 @@ public class DashboardApiController {
 		try {
 
 			list = customerListForDashRepo.getListOfCustomer(fromDate, toDate, frId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@RequestMapping(value = "/getDataForLineChart", method = RequestMethod.POST)
+	public @ResponseBody List<GetDataForLineChart> getDataForLineChart(@RequestParam("frId") int frId,
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("flag") int flag) {
+		List<GetDataForLineChart> list = new ArrayList<>();
+		try {
+
+			if(flag==1) {
+				list = getDataForLineChartRepo.getDataForLineChartdate(fromDate, toDate, frId);
+			}else if(flag==2) {
+				list = getDataForLineChartRepo.getDataForLineChartweek(fromDate, toDate, frId);
+			}else if(flag==3) {
+				list = getDataForLineChartRepo.getDataForLineChartmonth(fromDate, toDate, frId);
+			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
