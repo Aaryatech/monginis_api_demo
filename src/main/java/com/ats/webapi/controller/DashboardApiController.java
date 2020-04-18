@@ -11,14 +11,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.CatWiseDashboardQuery;
+import com.ats.webapi.model.CustomerListForDash;
 import com.ats.webapi.model.DashboardData;
 import com.ats.webapi.model.DateWiseDashboardGraphQuery;
+import com.ats.webapi.model.GetItemListForDashboardByCatId;
 import com.ats.webapi.model.dailysales.DailySalesRegular;
 import com.ats.webapi.model.dailysales.DailySalesReportDao;
 import com.ats.webapi.model.dailysales.SpDailySales;
 import com.ats.webapi.repo.CatWiseDashboardQueryRepo;
 import com.ats.webapi.repo.DashboardDataRepo;
 import com.ats.webapi.repo.DateWiseDashboardGraphQueryRepo;
+import com.ats.webapi.repository.CustomerListForDashRepo;
+import com.ats.webapi.repository.GetItemListForDashboardByCatIdRepo;
 import com.ats.webapi.repository.dailysales.DailySpSalesRepository;
 
 @RestController
@@ -33,6 +37,12 @@ public class DashboardApiController {
 	@Autowired
 	CatWiseDashboardQueryRepo catWiseDashboardQueryRepo;
 
+	@Autowired
+	GetItemListForDashboardByCatIdRepo getItemListForDashboardByCatIdRepo;
+
+	@Autowired
+	CustomerListForDashRepo customerListForDashRepo;
+
 	@RequestMapping(value = "/getDashboardData", method = RequestMethod.POST)
 	public @ResponseBody DashboardData getDashboardData(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
@@ -40,7 +50,7 @@ public class DashboardApiController {
 		DashboardData dashboardData = new DashboardData();
 		try {
 
-			dashboardData = dashboardDataRepo.getDashboardData(fromDate, toDate, frId,month,year);
+			dashboardData = dashboardDataRepo.getDashboardData(fromDate, toDate, frId, month, year);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,6 +79,50 @@ public class DashboardApiController {
 		try {
 
 			list = catWiseDashboardQueryRepo.dateWiseDashboardGraphQuery(fromDate, toDate, frId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@RequestMapping(value = "/getItemListForDashboardByCatId", method = RequestMethod.POST)
+	public @ResponseBody List<GetItemListForDashboardByCatId> getItemListForDashboardByCatId(
+			@RequestParam("frId") int frId, @RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("catId") int catId, @RequestParam("flag") int flag) {
+		List<GetItemListForDashboardByCatId> list = new ArrayList<>();
+		try {
+
+			if (catId != 5) {
+				if (flag == 1) {
+					list = getItemListForDashboardByCatIdRepo.getItemListForDashboardByCatIdasc(fromDate, toDate, frId,
+							catId);
+				} else {
+					list = getItemListForDashboardByCatIdRepo.getItemListForDashboardByCatIddesc(fromDate, toDate, frId,
+							catId);
+				}
+
+			} else {
+				if (flag == 1) {
+					list = getItemListForDashboardByCatIdRepo.getItemListForDashboardspdasc(fromDate, toDate, frId);
+				} else {
+					list = getItemListForDashboardByCatIdRepo.getItemListForDashboardspddesc(fromDate, toDate, frId);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@RequestMapping(value = "/getListOfCustomer", method = RequestMethod.POST)
+	public @ResponseBody List<CustomerListForDash> getListOfCustomer(@RequestParam("frId") int frId,
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+		List<CustomerListForDash> list = new ArrayList<>();
+		try {
+
+			list = customerListForDashRepo.getListOfCustomer(fromDate, toDate, frId);
 
 		} catch (Exception e) {
 			e.printStackTrace();
