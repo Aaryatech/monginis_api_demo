@@ -32,6 +32,7 @@ import com.ats.webapi.model.prod.mixing.GetTempMixItemDetail;
 import com.ats.webapi.model.prod.mixing.GetTempMixItemDetailList;
 import com.ats.webapi.model.prod.mixing.TempMixing;
 import com.ats.webapi.model.prod.mixing.TempMixingList;
+import com.ats.webapi.repository.FrItemStockConfigureRepository;
 import com.ats.webapi.repository.PostProdPlanHeaderRepository;
 import com.ats.webapi.repository.getproddetailbysubcat.GetProdDetailBySubCatRepo;
 import com.ats.webapi.repository.prod.GetProdHeaderRepo;
@@ -207,7 +208,7 @@ public class TempProdApi {
 	
 		
 		//bom started
-		@RequestMapping(value = { "/getSfPlanDetailForBom" }, method = RequestMethod.POST)
+		/* @RequestMapping(value = { "/getSfPlanDetailForBom" }, method = RequestMethod.POST)
 		public @ResponseBody GetSFPlanDetailForMixingList getSfPlanDetailForBom(@RequestParam("headerId")int headerId) {
 
 			GetSFPlanDetailForMixingList sfAndPlanDetailList = new GetSFPlanDetailForMixingList();
@@ -241,6 +242,52 @@ public class TempProdApi {
 			}
 				return sfAndPlanDetailList;
 		  }
+		*/
+		@Autowired
+		FrItemStockConfigureRepository frItemStockConfRepo;
+		
+		
+		@RequestMapping(value = { "/getSfPlanDetailForBom" }, method = RequestMethod.POST)
+		public @ResponseBody GetSFPlanDetailForMixingList getSfPlanDetailForBom(@RequestParam("headerId")int headerId,@RequestParam("deptId") int deptId) {
+
+			GetSFPlanDetailForMixingList sfAndPlanDetailList = new GetSFPlanDetailForMixingList();
+			List<GetSFPlanDetailForMixing> sfPlanDetailForBom=null;
+			Info info=new Info();
+System.err.println("Bom Data req Ids headerId "+headerId + "deptId " +deptId);
+			try {
+				int deptIdStore=frItemStockConfRepo.findBySettingKey("STORE");
+                if(deptIdStore==deptId) {
+                	System.err.println("Its Store BOM");
+               	 sfPlanDetailForBom=getSFPlanDetailForMixingRepo.getSfPlanDetailForStoreBom(headerId,deptId);
+                }else {
+                	System.err.println("Its mixing BOM");
+				 sfPlanDetailForBom=getSFPlanDetailForMixingRepo.getSfPlanDetailForBom(headerId,deptId);
+                }
+			if(!sfPlanDetailForBom.isEmpty()) {
+				
+				info.setError(false);
+				info.setMessage("success");
+				
+			}
+			else {
+				
+				info.setError(true);
+				info.setMessage("failed");
+			}
+	  
+			sfAndPlanDetailList.setSfPlanDetailForMixing(sfPlanDetailForBom);
+			sfAndPlanDetailList.setInfo(info);
+			
+			
+			}catch (Exception e) {
+				System.out.println("Error getting sf and Plan Detail For Bom ");
+				e.printStackTrace();
+				
+			}
+				return sfAndPlanDetailList;
+		  }
+		
+		
 		
 		//bom second web service
 		

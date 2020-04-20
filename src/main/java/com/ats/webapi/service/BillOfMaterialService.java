@@ -16,7 +16,7 @@ public interface BillOfMaterialService{
 
 	GetBillOfMaterialList getallBOMHeaderList();
 
-	GetBillOfMaterialList getBillOfMaterialBmsToStoreDate(int fromDept, int toDept, List<String> status);
+	GetBillOfMaterialList getBillOfMaterialBmsToStoreDate(int fromDept, List<Integer> toDept, List<String> status);
 
 	/*ErrorMessage updatestatus(int reqId);*/
 

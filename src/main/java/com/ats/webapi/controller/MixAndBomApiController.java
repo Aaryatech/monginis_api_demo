@@ -163,7 +163,7 @@ public class MixAndBomApiController {
 	
 	@RequestMapping(value = { "/getBOMHeaderBmsAndStore" }, method = RequestMethod.POST)
 	@ResponseBody
-	public GetBillOfMaterialList getBOMHeaderBmsAndStore(@RequestParam("fromDept")int fromDept, @RequestParam("toDept")int toDept,@RequestParam("status")List<String> status ) {
+	public GetBillOfMaterialList getBOMHeaderBmsAndStore(@RequestParam("fromDept")int fromDept, @RequestParam("toDept") List<Integer> toDept,@RequestParam("status")List<String> status ) {
 		
 		GetBillOfMaterialList getBillOfMaterialList=new GetBillOfMaterialList();
 		try {

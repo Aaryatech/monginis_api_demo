@@ -142,7 +142,7 @@ public class BillOfMaterialServiceImp implements BillOfMaterialService{
 	}
 
 	@Override
-	public GetBillOfMaterialList getBillOfMaterialBmsToStoreDate(int fromDept, int toDept, List<String> status) {
+	public GetBillOfMaterialList getBillOfMaterialBmsToStoreDate(int fromDept, List<Integer> toDept, List<String> status) {
 		GetBillOfMaterialList getBillOfMaterialList = new GetBillOfMaterialList();
 		ErrorMessage errorMessage = new ErrorMessage();
 		 
