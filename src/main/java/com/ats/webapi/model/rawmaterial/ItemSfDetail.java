@@ -43,6 +43,12 @@ public class ItemSfDetail implements Serializable{
 	
 	@Column(name="del_status")
 	private int delStatus;
+	
+	
+	@Column(name="seq_no")
+	private int seqNo;
+	
+
 
 	public int getSfDid() {
 		return sfDid;
@@ -116,4 +122,21 @@ public class ItemSfDetail implements Serializable{
 		this.rmType = rmType;
 	}
 
+	public int getSeqNo() {
+		return seqNo;
+	}
+
+	public void setSeqNo(int seqNo) {
+		this.seqNo = seqNo;
+	}
+
+	@Override
+	public String toString() {
+		return "ItemSfDetail [sfDid=" + sfDid + ", sfId=" + sfId + ", rmType=" + rmType + ", rmId=" + rmId + ", rmName="
+				+ rmName + ", rmQty=" + rmQty + ", rmUnit=" + rmUnit + ", rmWeight=" + rmWeight + ", delStatus="
+				+ delStatus + ", seqNo=" + seqNo + "]";
+	}
+
+	
+	
 }
