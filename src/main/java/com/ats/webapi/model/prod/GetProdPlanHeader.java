@@ -51,7 +51,20 @@ public class GetProdPlanHeader implements Serializable {
 	
 	@Column(name="is_planned")
 	private int isPlanned;
+	//new Added on 06-03-2020 mS
+	@Column(name="int_2")
+	private int isStoreBom;
 	
+	
+	
+
+	public int getIsStoreBom() {
+		return isStoreBom;
+	}
+
+	public void setIsStoreBom(int isStoreBom) {
+		this.isStoreBom = isStoreBom;
+	}
 
 	public int getProductionHeaderId() {
 		return productionHeaderId;

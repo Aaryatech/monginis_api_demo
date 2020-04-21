@@ -425,14 +425,28 @@ public class PorductionApiController {
 	}
 
 	// ----------------------------------END-------------------------------------
+	/*
+	 * @RequestMapping(value = { "/updateisMixingandBom" }, method =
+	 * RequestMethod.POST) public @ResponseBody int
+	 * updateisMixing(@RequestParam("productionId") int productionId,
+	 * 
+	 * @RequestParam("flag") int flag) {
+	 * 
+	 * int menuList = productionService.updateisMixing(productionId, flag);
+	 * 
+	 * return menuList;
+	 * 
+	 * }
+	 */
+	
 	@RequestMapping(value = { "/updateisMixingandBom" }, method = RequestMethod.POST)
-	public @ResponseBody int updateisMixing(@RequestParam("productionId") int productionId,
-			@RequestParam("flag") int flag) {
-
-		int menuList = productionService.updateisMixing(productionId, flag);
-
+	public @ResponseBody int updateisMixing(@RequestParam("productionId") int productionId,@RequestParam("flag") int flag,@RequestParam("deptId")int deptId)
+	{
+		
+		int menuList=productionService.updateisMixing(productionId,flag,deptId);
+		
 		return menuList;
-
+		
 	}
 
 	@RequestMapping(value = { "/updateProductionStatus" }, method = RequestMethod.POST)

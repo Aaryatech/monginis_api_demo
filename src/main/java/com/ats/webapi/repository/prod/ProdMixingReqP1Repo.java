@@ -28,18 +28,46 @@ public interface ProdMixingReqP1Repo  extends JpaRepository<ProdMixingReqP1, Int
 	*/
 	
 	//2 Feb 2018 query Sumit Sir 
-	@Query(value="sELECT m_item_detail.item_detail_id, m_item_detail.item_id, m_item_detail.rm_name, m_item_detail.rm_type,"
-			+ "sum(t_production_plan_detail.plan_qty) as plan_qty, sum(t_production_plan_detail.order_qty) AS order_qty,m_item_detail.rm_id, "
-			+ "m_item_detail.no_pieces_per_item, m_item_detail.rm_qty,CASE WHEN t_production_plan_header.is_planned=1 "
-			+ "THEN ((SUM(t_production_plan_detail.plan_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item) "
-			+ "ELSE ((SUM(t_production_plan_detail.order_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item) END AS total "
-			+ ",m_rm_uom.uom, coalesce((Select m_item_sf_header.mul_factor From m_item_sf_header "
-			+ "where m_item_sf_header.sf_id=m_item_detail.rm_id),0) AS mul_factor FROM m_item_detail, "
-			+ "t_production_plan_header, t_production_plan_detail,m_rm_uom WHERE t_production_plan_detail.item_id=m_item_detail.item_id "
-			+ "AND t_production_plan_header.production_header_id=t_production_plan_detail.production_header_id "
-			+ "AND t_production_plan_header.production_header_id=:headerId AND m_rm_uom.uom_id=m_item_detail.rm_uom_id and m_item_detail.rm_type=2 "
-			+ "GROUP BY m_item_detail.rm_id " + 
-			"",nativeQuery=true)
+	/*
+	 * @Query(
+	 * value="sELECT m_item_detail.item_detail_id, m_item_detail.item_id, m_item_detail.rm_name, m_item_detail.rm_type,"
+	 * +
+	 * "sum(t_production_plan_detail.plan_qty) as plan_qty, sum(t_production_plan_detail.order_qty) AS order_qty,m_item_detail.rm_id, "
+	 * +
+	 * "m_item_detail.no_pieces_per_item, m_item_detail.rm_qty,CASE WHEN t_production_plan_header.is_planned=1 "
+	 * +
+	 * "THEN ((SUM(t_production_plan_detail.plan_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item) "
+	 * +
+	 * "ELSE ((SUM(t_production_plan_detail.order_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item) END AS total "
+	 * +
+	 * ",m_rm_uom.uom, coalesce((Select m_item_sf_header.mul_factor From m_item_sf_header "
+	 * +
+	 * "where m_item_sf_header.sf_id=m_item_detail.rm_id),0) AS mul_factor FROM m_item_detail, "
+	 * +
+	 * "t_production_plan_header, t_production_plan_detail,m_rm_uom WHERE t_production_plan_detail.item_id=m_item_detail.item_id "
+	 * +
+	 * "AND t_production_plan_header.production_header_id=t_production_plan_detail.production_header_id "
+	 * +
+	 * "AND t_production_plan_header.production_header_id=:headerId AND m_rm_uom.uom_id=m_item_detail.rm_uom_id and m_item_detail.rm_type=2 "
+	 * + "GROUP BY m_item_detail.rm_id " + "",nativeQuery=true)
+	 * 
+	 * List<ProdMixingReqP1> getSFAndPlanDetailForMixing(@Param("headerId") int
+	 * headerId);
+	 */
 	
-	List<ProdMixingReqP1> getSFAndPlanDetailForMixing(@Param("headerId") int headerId);
+	@Query(value="SELECT m_item_detail.item_detail_id, m_item_detail.item_id, m_item_detail.rm_name, m_item_detail.rm_type,\n" + 
+			"			sum(t_production_plan_detail.plan_qty) as plan_qty, sum(t_production_plan_detail.order_qty) AS order_qty,m_item_detail.rm_id, \n" + 
+			"			m_item_detail.no_pieces_per_item, m_item_detail.rm_qty,CASE WHEN t_production_plan_header.is_planned=1 \n" + 
+			"			THEN SUM(CEIL(((t_production_plan_detail.plan_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item)) \n" + 
+			"			ELSE SUM(CEIL(((t_production_plan_detail.order_qty)* m_item_detail.rm_qty)/m_item_detail.no_pieces_per_item)) END AS total \n" + 
+			"			,m_rm_uom.uom, m_item_sf_header.mul_factor\n" + 
+			"                        FROM m_item_detail, \n" + 
+			"			t_production_plan_header, t_production_plan_detail,m_rm_uom,m_item_sf_header WHERE t_production_plan_detail.item_id=m_item_detail.item_id  and   m_item_sf_header.sf_id=m_item_detail.rm_id and m_item_sf_header.int_1=:deptId and m_item_detail.rm_type=2 \n" + 
+			"			AND t_production_plan_header.production_header_id=t_production_plan_detail.production_header_id \n" + 
+			"			AND t_production_plan_header.production_header_id=:headerId AND m_rm_uom.uom_id=m_item_detail.rm_uom_id and m_item_detail.rm_type=2 and m_item_detail.del_status=0\n" + 
+			"			 GROUP BY m_item_detail.rm_id ",nativeQuery=true)
+	
+	List<ProdMixingReqP1> getSFAndPlanDetailForMixing(@Param("headerId") int headerId,@Param("deptId") int deptId);
+
+	
 }

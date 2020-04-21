@@ -170,7 +170,7 @@ public class TempProdApi {
 	//used 3
 	
 		@RequestMapping(value = { "/getSfPlanDetailForMixing" }, method = RequestMethod.POST)
-		public @ResponseBody ProdMixingReqP1List getSfPlanDetailForMixing(@RequestParam("headerId")int headerId) {
+		public @ResponseBody ProdMixingReqP1List getSfPlanDetailForMixing(@RequestParam("headerId")int headerId,@RequestParam("deptId")int deptId) {
 
 			ProdMixingReqP1List sfAndPlanDetailList = new ProdMixingReqP1List();
 			
@@ -180,7 +180,7 @@ public class TempProdApi {
 			
 				//List<GetSFPlanDetailForMixing> sfPlanDetailForMixing=getSFPlanDetailForMixingRepo.getSFAndPlanDetailForMixing(headerId);
 				
-				List<ProdMixingReqP1> sfPlanDetailForMixing=prodMixReqP1.getSFAndPlanDetailForMixing(headerId);
+				List<ProdMixingReqP1> sfPlanDetailForMixing=prodMixReqP1.getSFAndPlanDetailForMixing(headerId,deptId);
 			
 				
 			if(!sfPlanDetailForMixing.isEmpty()) {
