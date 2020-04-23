@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import com.ats.webapi.model.prod.mixing.GetSFPlanDetailForMixing;
 
 //New Repo Sachin
-
+//All new Pune copy Sachin 23-04
 public interface GetSFPlanDetailForMixingRepo extends JpaRepository<GetSFPlanDetailForMixing, Integer> {
 
 	

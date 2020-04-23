@@ -55,6 +55,7 @@ import com.ats.webapi.repository.ItemResponseRepository;
 import com.ats.webapi.repository.ItemStockRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.MessageRepository;
+import com.ats.webapi.repository.MiniSubCategoryRepository;
 import com.ats.webapi.repository.OrderLogRespository;
 import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.PostBillHeaderRepository;
@@ -5242,5 +5243,24 @@ public class RestApiController {
 	
 		return res;
 	}
+	//Sachin 23-04-2020
+	// Get All Items ForItemDetail"
+			@RequestMapping(value = { "/getAllItemsForForItemDetail" }, method = RequestMethod.POST)
+			public @ResponseBody ItemsList findAllItems(@RequestParam int rmId, @RequestParam int rmType) {
+				ItemsList itemsList = itemService.getItemsForItemDetail(rmId, rmType);
+				return itemsList;
+			}
+			
+			@Autowired
+			MiniSubCategoryRepository miniSubCategoryRepository;
+			
+			@RequestMapping(value = { "/showMiniSubCatList" }, method = RequestMethod.GET)
+			@ResponseBody
+			public List<MiniSubCategory> showMiniSubCatList() {
+
+				List<MiniSubCategory> miniSubCategorylist = miniSubCategoryRepository.showMiniSubCatList();
+
+				return miniSubCategorylist;
+			}
 	 
 }

@@ -196,6 +196,33 @@ public class MasterController {
 	@Autowired
 	FrSettingRepo frSettingRepo;
 	
+	
+	//Sac 23-04-2020
+	@RequestMapping(value = "/getItemsByProductionIdCatId", method = RequestMethod.POST)
+	public @ResponseBody List<Item> getItemsByProductionIdCatId(@RequestParam int prodHeaderId) {
+
+		List<Item> itemList;
+		try {
+			itemList = itemRepository.getItemsByProductionIdCatId(prodHeaderId);
+		} catch (Exception e) {
+			itemList = new ArrayList<>();
+			e.printStackTrace();
+
+		}
+		return itemList;
+
+	}
+	//Sac 23-04-2020
+	@RequestMapping(value = "/findItemsByGrpIdForRmIssue", method = RequestMethod.POST)
+	public @ResponseBody List<Item> findItemsByGrpIdForRmIssue(@RequestParam String itemGrp3,
+			@RequestParam int prodHeaderId, @RequestParam int fromDept, @RequestParam int toDept) {
+
+		List<Item> itemList = itemRepository.findByItemGrp3(itemGrp3, prodHeaderId, fromDept, toDept);
+		return itemList;
+
+	}
+	
+	
 	@RequestMapping(value = "/getOtherItemsByCatIdAndFrId", method = RequestMethod.POST)
 	public @ResponseBody List<Item> getOtherItemsByCatIdAndFrId(@RequestParam double frId) {
 
@@ -1430,4 +1457,7 @@ public class MasterController {
 					return info;
 					
 				}
+				
+				
+				
 }

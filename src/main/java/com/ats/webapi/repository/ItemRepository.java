@@ -115,4 +115,60 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	public List<Item> findByItemGrp1AndItemRate2AndDelStatus(String i, double frId, int j);
 
+	@Query(value = "select m_item.* from m_item where m_item.del_status=0 and m_item.item_grp1=(select cat_id from t_production_plan_header where production_header_id=:prodHeaderId)  ", nativeQuery = true)
+	public List<Item> getItemsByProductionIdCatId(@Param("prodHeaderId")int prodHeaderId);
+	
+	
+	@Query(value = "select m_item.* from m_item where m_item.del_status=0 and m_item.id In(select m_item_detail.item_id from m_item_detail where del_status=0 and m_item_detail.rm_id=:rmId and rm_type=:rmType)",nativeQuery=true)
+	public List<Item> getItemsByRmIdAndRmType(@Param("rmId")int rmId,@Param("rmType") int rmType);
+
+	
+	@Query(value = "select\n" + 
+			"a.*,\n" + 
+			"coalesce(b.item_id,0) as item_id\n" + 
+			"from ( select\n" + 
+			"       id, \n" + 
+			"  item_name ,\n" + 
+			"  item_grp1 ,\n" + 
+			"  item_grp2 ,\n" + 
+			"  item_grp3, \n" + 
+			"  item_rate1,\n" + 
+			"  item_rate2 , \n" + 
+			"  item_rate3,\n" + 
+			"  item_mrp1 ,\n" + 
+			"  item_mrp2 ,\n" + 
+			"  item_mrp3 ,\n" + 
+			"  item_image , \n" + 
+			"  item_tax1 ,\n" + 
+			"  item_tax2 ,\n" + 
+			"  item_tax3 ,\n" + 
+			"  item_is_used ,\n" + 
+			"  item_sort_id , \n" + 
+			"  grn_two ,\n" + 
+			"  del_status,\n" + 
+			"  min_qty , \n" + 
+			"  item_shelf_life\n" + 
+			"    from\n" + 
+			"        m_item \n" + 
+			"    where\n" + 
+			"        m_item.del_status=0 \n" + 
+			"        And m_item.item_grp3=:itemGrp3" + 
+			"        and m_item.id IN (\n" + 
+			"            select\n" + 
+			"                d.item_id \n" + 
+			"            from\n" + 
+			"                t_production_plan_detail d \n" + 
+			"            where\n" + 
+			"                d.production_header_id=:prodHeaderId\n" + 
+			"            group by\n" + 
+			"                d.item_id\n" + 
+			"        ) \n" + 
+			"    order by\n" + 
+			"        m_item.item_name \n" + 
+			") a LEFT JOIN\n" + 
+			"(\n" + 
+			"select id,1 as item_id from m_item where FIND_IN_SET(id,(select GROUP_CONCAT(ex_varchar2) from t_req_bom where production_id=:prodHeaderId  and is_manual=0  and from_dept_id=:fromDept and to_dept_id=:toDept and ex_int2=1))  and m_item.del_status=0\n" + 
+			") b ON a.id=b.id", nativeQuery = true)
+	public List<Item> findByItemGrp3(@Param("itemGrp3") String itemGrp3,@Param("prodHeaderId") int prodHeaderId,@Param("fromDept")int fromDept,@Param("toDept") int toDept);
+
 }

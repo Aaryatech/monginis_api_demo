@@ -76,6 +76,63 @@ public interface  ItemSfHeaderRepository extends JpaRepository<GetItemSfHeader, 
 	 * 
 	 */
 	
+	/*
+	 * @Query(value = " SELECT\n" + "        m_sf_type.sf_type_name,\n" +
+	 * "        m_item_sf_header.sf_name,\n" + "        m_item_sf_header.sf_id,\n" +
+	 * "        m_item_sf_header.sf_type,\n" +
+	 * "        m_item_sf_header.sf_uom_id,\n" +
+	 * "        m_item_sf_header.sf_weight,\n" +
+	 * "        m_item_sf_header.stock_qty,\n" +
+	 * "        m_item_sf_header.min_level_qty,\n" +
+	 * "        m_item_sf_header.max_level_qty,\n" +
+	 * "        m_item_sf_header.reorder_level_qty,\n" +
+	 * "        m_item_sf_header.mul_factor,\n" +
+	 * "        m_item_sf_header.del_status, m_item_sf_header.int_1, m_item_sf_header.int_2, m_item_sf_header.varchar_1, m_item_sf_header.varchar_2, m_item_sf_header.bool_1 \n"
+	 * + "    from\n" + "        m_item_sf_header,\n" + "        m_sf_type \n" +
+	 * "    WHERE\n" + "        m_item_sf_header.sf_type=m_sf_type.id \n" +
+	 * "        AND m_item_sf_header.del_status=:delStatus order by m_item_sf_header.sf_name Asc"
+	 * , nativeQuery = true)
+	 * 
+	 * List<GetItemSfHeader> getSfItemHeader(@Param("delStatus")int delStatus);
+	 * 
+	 * @Query(value = " SELECT\n" + "        m_sf_type.sf_type_name,\n" +
+	 * "        m_item_sf_header.sf_name,\n" + "        m_item_sf_header.sf_id,\n" +
+	 * "        m_item_sf_header.sf_type,\n" +
+	 * "        m_item_sf_header.sf_uom_id,\n" +
+	 * "        m_item_sf_header.sf_weight,\n" +
+	 * "        m_item_sf_header.stock_qty,\n" +
+	 * "        m_item_sf_header.min_level_qty,\n" +
+	 * "        m_item_sf_header.max_level_qty,\n" +
+	 * "        m_item_sf_header.reorder_level_qty,\n" +
+	 * "        m_item_sf_header.mul_factor,\n" +
+	 * "        m_item_sf_header.del_status, m_item_sf_header.int_1, m_item_sf_header.int_2, m_item_sf_header.varchar_1, m_item_sf_header.varchar_2, m_item_sf_header.bool_1 \n"
+	 * + "    from\n" + "        m_item_sf_header,\n" + "        m_sf_type \n" +
+	 * "    WHERE\n" + "        m_item_sf_header.sf_type=m_sf_type.id \n" +
+	 * "        AND m_item_sf_header.sf_type=:sfType order by m_item_sf_header.sf_name Asc"
+	 * , nativeQuery = true)
+	 * 
+	 * List<GetItemSfHeader> getItemSfHeadersBySfType(@Param("sfType")int sfType);
+	 * 
+	 * @Query(value = " SELECT\n" + "        m_sf_type.sf_type_name,\n" +
+	 * "        m_item_sf_header.sf_name,\n" + "        m_item_sf_header.sf_id,\n" +
+	 * "        m_item_sf_header.sf_type,\n" +
+	 * "        m_item_sf_header.sf_uom_id,\n" +
+	 * "        m_item_sf_header.sf_weight,\n" +
+	 * "        m_item_sf_header.stock_qty,\n" +
+	 * "        m_item_sf_header.min_level_qty,\n" +
+	 * "        m_item_sf_header.max_level_qty,\n" +
+	 * "        m_item_sf_header.reorder_level_qty,\n" +
+	 * "        m_item_sf_header.mul_factor,\n" +
+	 * "        m_item_sf_header.del_status, m_item_sf_header.int_1, m_item_sf_header.int_2, m_item_sf_header.varchar_1, m_item_sf_header.varchar_2, m_item_sf_header.bool_1 \n"
+	 * + "    from\n" + "        m_item_sf_header,\n" + "        m_sf_type \n" +
+	 * "    WHERE\n" + "        m_item_sf_header.sf_type=m_sf_type.id \n" +
+	 * "        AND m_item_sf_header.del_status=:delStatus and m_item_sf_header.int_1=:deptId order by m_item_sf_header.sf_name Asc "
+	 * , nativeQuery = true) List<GetItemSfHeader>
+	 * getItemSfHeaderListForOpeningStock(@Param("delStatus") int
+	 * delStatus,@Param("deptId") int deptId);
+	 * 
+	 */
+	
 	@Query(value = " SELECT\n" + 
 			"        m_sf_type.sf_type_name,\n" + 
 			"        m_item_sf_header.sf_name,\n" + 
