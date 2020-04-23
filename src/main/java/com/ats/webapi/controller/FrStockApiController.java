@@ -135,9 +135,13 @@ public class FrStockApiController {
 		List<Item> itemsList = itemService.getAllItems();
 		System.err.println("itemsList" + itemsList.toString());
 
-		List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+		List<PostFrItemStockHeader> prevStockHeader = new ArrayList<PostFrItemStockHeader>();
+		List<PostFrItemStockDetail> detailList = new ArrayList<PostFrItemStockDetail>();
+		
+		try {
+		 prevStockHeader = postFrOpStockHeaderRepository
 				.findByFrIdAndIsMonthClosedAndCatId(frId, 0, catId);
-		List<PostFrItemStockDetail> detailList = postFrOpStockDetailRepository
+		 detailList = postFrOpStockDetailRepository
 				.getFrDetail(prevStockHeader.get(0).getOpeningStockHeaderId());
 		for (int i = 0; i < detailList.size(); i++) {
 
@@ -153,6 +157,10 @@ public class FrStockApiController {
 				}
 
 			}
+		}
+		}catch (Exception e) {
+			System.err.println("Ex in getCurrentOpStock : "+e.getMessage());
+			e.printStackTrace();
 		}
 		return detailList;
 	}
