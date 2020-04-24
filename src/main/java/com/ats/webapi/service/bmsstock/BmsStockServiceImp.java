@@ -69,22 +69,22 @@ public class BmsStockServiceImp implements BmsStockService {
 	}
 
 	@Override
-	public BmsStockHeader getBmsStockHeader(int status, int rmType) {
-		BmsStockHeader bmsStockHeader=new BmsStockHeader();
+	public BmsStockHeader getBmsStockHeader(int status, int rmType, int deptId) {
 		
-		bmsStockHeader=bmsStockHeaderRepository.getStockDetails(status,  rmType);
+		BmsStockHeader bmsStockHeader=new BmsStockHeader(); 
+		bmsStockHeader=bmsStockHeaderRepository.getStockDetails(status,  rmType,deptId);
 		
 		return bmsStockHeader;
 	}
 
 	@Override
-	public BmsStockHeader getBmsStockForEdit(int type) {
+	public BmsStockHeader getBmsStockForEdit(int type,int deptId) {
 		
 		BmsStockHeader bmsStockHeader = new BmsStockHeader();
 		List<BmsStockDetailed> bmsStockDetailed = new ArrayList<BmsStockDetailed>();
 		try
 		{
-			bmsStockHeader = bmsStockHeaderRepository.getStockDetails(0,  type);
+			bmsStockHeader = bmsStockHeaderRepository.getStockDetails(0,  type,deptId);
 			
 			if(bmsStockHeader!=null)
 			{

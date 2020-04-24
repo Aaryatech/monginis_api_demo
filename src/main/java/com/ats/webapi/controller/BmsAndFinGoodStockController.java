@@ -85,8 +85,8 @@ public class BmsAndFinGoodStockController {
 		
 				updateBmsRmResponse=updateBmsStockRepo.updateBmsRmStock(stock.getBmsStockId(), stock.getProdIssueQty(), stock.getProdRejectedQty(),
 						
-				 stock.getProdReturnQty(), stock.getMixingIssueQty(), stock.getMixingRejectedQty(), stock.getMixingReturnQty(), stock.getStoreIssueQty(), 
-				 stock.getStoreRejectedQty(), stock.getBmsClosingStock(), stock.getRmId(), stock.getMixingReceiveRejectedQty(), stock.getMixingRecQty());
+						 stock.getProdReturnQty(), stock.getMixingIssueQty(), stock.getMixingRejectedQty(), stock.getMixingReturnQty(), stock.getStoreIssueQty(), 
+						 stock.getStoreRejectedQty(), stock.getBmsClosingStock(), stock.getRmId(), stock.getMixingReceiveRejectedQty(), stock.getMixingRecQty());
 			}
 			
 		 if(updateBmsRmResponse>0) {
@@ -100,7 +100,6 @@ public class BmsAndFinGoodStockController {
 		
 		return info;
 	}
-	
 	
 	@RequestMapping(value = { "/updateBmsStockForSF" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateBmsStockForSf(@RequestBody UpdateBmsSfStockList sfUpdate) {
@@ -151,52 +150,52 @@ h1.bms_status=1
 	 
 	 */
 //changed on 5 Feb 
-	@RequestMapping(value = { "/getCurentBmsStockRM" }, method = RequestMethod.POST)
-	public @ResponseBody GetBmsCurrentStockList getCurrentBmsStockListRM(@RequestParam("prodDeptId") int prodDeptId,
-			@RequestParam("mixDeptId") int mixDeptId, @RequestParam("bmsDeptId") int bmsDeptId, @RequestParam("stockDate") String stockDate) {
+	//gfpl copy 
+		@RequestMapping(value = { "/getCurentBmsStockRM" }, method = RequestMethod.POST)
+		public @ResponseBody GetBmsCurrentStockList getCurrentBmsStockListRM(@RequestParam("deptId") int deptId, @RequestParam("stockDate") String stockDate) {
+			
+			System.out.println("Inside Get bms current stock get web Service");
 		
-		System.out.println("Inside Get bms current stock get web Service");
-	
-		Info info = new Info();
+			Info info = new Info();
 
-		//java.sql.Date cDate = new java.sql.Date(Calendar.getInstance().getTime().getTime()); 
-		
-		
-		java.sql.Date cDate=Common.convertToSqlDate(stockDate);
-		System.out.println("Input received for BMS Current Stock for RM ");
-		System.out.println("Current Date"+cDate + "prod Dept Id"+prodDeptId+"mixDept Id"+mixDeptId+ "bmsDeptId Id "+bmsDeptId);
+			//java.sql.Date cDate = new java.sql.Date(Calendar.getInstance().getTime().getTime()); 
+			
+			
+			java.sql.Date cDate=Common.convertToSqlDate(stockDate);
+			 
 
-		GetBmsCurrentStockList bmsStockList = new GetBmsCurrentStockList();
-		try {
+			GetBmsCurrentStockList bmsStockList = new GetBmsCurrentStockList();
+			try {
 
-			List<GetBmsCurrentStock> bmsCurrentStock = currentBmsStockRepo.getBmsCurStockForRM(cDate, prodDeptId, mixDeptId,
-					bmsDeptId);
+				List<GetBmsCurrentStock> bmsCurrentStock = currentBmsStockRepo.getBmsCurStockForRM(cDate,
+						deptId);
 
-			if (!bmsCurrentStock.isEmpty()) {
+				if (!bmsCurrentStock.isEmpty()) {
 
-				info.setError(false);
-				info.setMessage("success getting bms current stock list RM ");
+					info.setError(false);
+					info.setMessage("success getting bms current stock list RM ");
 
-				bmsStockList.setBmsCurrentStock(bmsCurrentStock);
-			} else {
+					bmsStockList.setBmsCurrentStock(bmsCurrentStock);
+				} else {
 
-				info.setError(true);
-				info.setMessage("Error getting bms current  stock list for rm ");
+					info.setError(true);
+					info.setMessage("Error getting bms current  stock list for rm ");
 
+				}
+
+				bmsStockList.setInfo(info);
+				System.out.println("Stock List BMS Current Stock for RM   " + bmsStockList.toString());
+
+			} catch (Exception e) {
+
+				System.out.println("Exc in Getting Current BMS stock List for RM  " + e.getMessage());
+				e.printStackTrace();
 			}
-
-			bmsStockList.setInfo(info);
-			System.out.println("Stock List BMS Current Stock for RM   " + bmsStockList.toString());
-
-		} catch (Exception e) {
-
-			System.out.println("Exc in Getting Current BMS stock List for RM  " + e.getMessage());
-			e.printStackTrace();
+			
+			
+			return bmsStockList;
 		}
 		
-		
-		return bmsStockList;
-	}
 	
 	
 	@RequestMapping(value = { "/getBmsStockRMBetDate" }, method = RequestMethod.POST)

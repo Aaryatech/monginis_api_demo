@@ -86,13 +86,13 @@ public class BmsStockApiController {
 	}
 	
 	@RequestMapping(value = { "/getBmsStockForEdit" }, method = RequestMethod.POST)
-	public @ResponseBody BmsStockHeader getBmsStockForEdit(@RequestParam("type") int type) {
+	public @ResponseBody BmsStockHeader getBmsStockForEdit(@RequestParam("type") int type,@RequestParam("deptId") int deptId) {
 
 		BmsStockHeader bmsStockHeaderloc = new BmsStockHeader();
 		try {
 
 	
-			bmsStockHeaderloc = bmsStockService.getBmsStockForEdit(type);
+			bmsStockHeaderloc = bmsStockService.getBmsStockForEdit(type,deptId);
 			
 			 	System.out.println("bmsStockHeaderloc"+bmsStockHeaderloc);
 			 	if(bmsStockHeaderloc ==null) {
@@ -181,20 +181,21 @@ public class BmsStockApiController {
 	
 	
 	@RequestMapping(value = { "/getBmsStockHeader" }, method = RequestMethod.POST)
-	public @ResponseBody BmsStockHeader getBmsStockHeader(@RequestParam("status")int status ,  @RequestParam("rmType")int rmType) {
+	public @ResponseBody BmsStockHeader getBmsStockHeader(@RequestParam("status")int status ,  @RequestParam("rmType")int rmType,
+			@RequestParam("deptId")int deptId) {
 
 		BmsStockHeader bmsStockHeader = new BmsStockHeader();
 		try {
 
-	System.out.println("status : "+status +"And rmType : "+rmType);
-			bmsStockHeader = bmsStockService.getBmsStockHeader(status,  rmType );
+			System.out.println("status : "+status +"And rmType : "+rmType + " deptId " + deptId);
+			bmsStockHeader = bmsStockService.getBmsStockHeader(status,  rmType,deptId );
 			
 			if(bmsStockHeader!=null )
 			{
 				System.out.println("successfully  ");
 			}
 			
-System.out.println("Response from getBms Header  : "+bmsStockHeader.toString());
+ 
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -204,5 +205,6 @@ System.out.println("Response from getBms Header  : "+bmsStockHeader.toString());
 		return bmsStockHeader;
 
 	}
+
 
 }

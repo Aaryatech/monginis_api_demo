@@ -9,13 +9,26 @@ import com.ats.webapi.model.stock.GetBmsStock;
 
 public interface BmsStockService {
 	
+	/*
+	 * BmsStockHeader insertBmsStock(BmsStockHeader bmsStockHeader);
+	 * 
+	 * List<GetBmsStock> getBmsStock(String fromDate, String toDate, int rmType);
+	 * 
+	 * BmsStockHeader getBmsStockHeader(int status, int rmType);
+	 * 
+	 * BmsStockHeader getBmsStockForEdit(int type);
+	 */
+	
+	//New 
 	BmsStockHeader insertBmsStock(BmsStockHeader bmsStockHeader);
 
 	List<GetBmsStock> getBmsStock(String fromDate, String toDate, int rmType);
 
-	BmsStockHeader getBmsStockHeader(int status, int rmType);
 
-	BmsStockHeader getBmsStockForEdit(int type);
+	BmsStockHeader getBmsStockForEdit(int type, int deptId);
+	BmsStockHeader getBmsStockHeader(int status, int rmType, int deptId);
+
+
 
 	 
 

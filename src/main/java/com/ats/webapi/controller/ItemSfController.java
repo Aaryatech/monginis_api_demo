@@ -41,6 +41,24 @@ public class ItemSfController {
 	
 	@Autowired
 	ItemSfDetailRepo itemSfDetailRepo;
+	
+	@RequestMapping(value = { "/getItemSfHeaderListForOpeningStock" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetItemSfHeader> getItemSfHeaderListForOpeningStock(@RequestParam("delStatus")int delStatus,@RequestParam("deptId")int deptId) {
+		
+		List<GetItemSfHeader> sfHeader=new ArrayList<GetItemSfHeader>();
+		
+		try {
+			
+			sfHeader=getItemSfHeaderRepo.getItemSfHeaderListForOpeningStock(delStatus,deptId);
+		}catch (Exception e) {
+			
+			System.out.println("Exe getting Sf Item Header  "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+	return sfHeader;
+	
+	}
 
 	@RequestMapping(value = { "/postSfItemHeader" }, method = RequestMethod.POST)
 	public @ResponseBody Info postSfItemHeader(@RequestBody ItemSfHeader itemSfHeader) {
