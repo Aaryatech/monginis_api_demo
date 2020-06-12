@@ -48,5 +48,103 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 
 	List<GstRegisterItem> getGstRegisterSpecFrItem(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("frIdList") List<Integer> frIdList);
+	
+	
+	@Query(value = " SELECT\n" + 
+			"    *\n" + 
+			"FROM\n" + 
+			"    (\n" + 
+			"    SELECT\n" + 
+			"        t1.*,\n" + 
+			"        COALESCE(t2.taxable_amt, 0) + COALESCE(t3.taxable_amt, 0) AS taxable_amt,\n" + 
+			"        COALESCE(t2.total_tax, 0) + COALESCE(t3.total_tax, 0) AS total_tax,\n" + 
+			"        COALESCE(t2.cgst_amt, 0) + COALESCE(t3.cgst_amt, 0) AS cgst_amt,\n" + 
+			"        COALESCE(t2.sgst_amt, 0) + COALESCE(t3.sgst_amt, 0) AS sgst_amt,\n" + 
+			"        COALESCE(t2.grand_total, 0) + COALESCE(t3.grand_total, 0) AS grand_total,\n" + 
+			"        COALESCE(t2.bill_qty, 0) + COALESCE(t3.bill_qty, 0) AS bill_qty\n" + 
+			"    FROM\n" + 
+			"        (\n" + 
+			"        SELECT\n" + 
+			"            d.bill_detail_no,\n" + 
+			"            h.invoice_no,\n" + 
+			"            h.bill_date,\n" + 
+			"            h.party_name AS fr_name,\n" + 
+			"            h.party_gstin AS fr_gst_no,\n" + 
+			"            h.bill_no,\n" + 
+			"            d.cgst_per,\n" + 
+			"            d.sgst_per,\n" + 
+			"            d.cgst_per + d.sgst_per AS tax_per,\n" + 
+			"            d.hsn_code\n" + 
+			"        FROM\n" + 
+			"            t_bill_header h,\n" + 
+			"            t_bill_detail d\n" + 
+			"        WHERE\n" + 
+			"            h.bill_no = d.bill_no AND h.del_status = 0 AND d.del_status = 0 AND h.bill_date BETWEEN :fromDate AND :toDate AND h.fr_id IN(:frIdList)\n" + 
+			"        GROUP BY\n" + 
+			"            h.bill_no,\n" + 
+			"            d.hsn_code\n" + 
+			"    ) t1\n" + 
+			"LEFT JOIN(\n" + 
+			"    SELECT\n" + 
+			"        d.bill_detail_no,\n" + 
+			"        h.bill_no,\n" + 
+			"        ROUND(SUM(d.taxable_amt),\n" + 
+			"        2) AS taxable_amt,\n" + 
+			"        ROUND(SUM(d.cgst_rs),\n" + 
+			"        2) AS cgst_amt,\n" + 
+			"        ROUND(SUM(d.sgst_rs),\n" + 
+			"        2) AS sgst_amt,\n" + 
+			"        ROUND(SUM(d.total_tax),\n" + 
+			"        2) AS total_tax,\n" + 
+			"        ROUND(SUM(d.grand_total),\n" + 
+			"        2) AS grand_total,\n" + 
+			"        ROUND(SUM(d.bill_qty),\n" + 
+			"        2) AS bill_qty,\n" + 
+			"        d.hsn_code AS hsn_code\n" + 
+			"    FROM\n" + 
+			"        t_bill_header h,\n" + 
+			"        t_bill_detail d\n" + 
+			"    WHERE\n" + 
+			"        h.bill_no = d.bill_no AND h.del_status = 0 AND d.del_status = 0 AND h.bill_date BETWEEN :fromDate AND :toDate AND h.fr_id IN(:frIdList) AND d.cat_id != 5\n" + 
+			"    GROUP BY\n" + 
+			"        h.bill_no,\n" + 
+			"        d.hsn_code\n" + 
+			") t2\n" + 
+			"ON\n" + 
+			"    t1.bill_no = t2.bill_no AND t1.hsn_code = t2.hsn_code\n" + 
+			"LEFT JOIN(\n" + 
+			"    SELECT\n" + 
+			"        d.bill_detail_no,\n" + 
+			"        h.bill_no,\n" + 
+			"        ROUND(SUM(d.taxable_amt),\n" + 
+			"        2) AS taxable_amt,\n" + 
+			"        ROUND(SUM(d.cgst_rs),\n" + 
+			"        2) AS cgst_amt,\n" + 
+			"        ROUND(SUM(d.sgst_rs),\n" + 
+			"        2) AS sgst_amt,\n" + 
+			"        ROUND(SUM(d.total_tax),\n" + 
+			"        2) AS total_tax,\n" + 
+			"        ROUND(SUM(d.grand_total),\n" + 
+			"        2) AS grand_total,\n" + 
+			"        ROUND(SUM(d.bill_qty),\n" + 
+			"        2) AS bill_qty,\n" + 
+			"        d.hsn_code AS hsn_code\n" + 
+			"    FROM\n" + 
+			"        t_bill_header h,\n" + 
+			"        t_bill_detail d\n" + 
+			"    WHERE\n" + 
+			"        h.bill_no = d.bill_no AND h.del_status = 0 AND d.del_status = 0 AND h.bill_date BETWEEN :fromDate AND :toDate AND h.fr_id IN(:frIdList) AND d.cat_id = 5\n" + 
+			"    GROUP BY\n" + 
+			"        h.bill_no,\n" + 
+			"        d.hsn_code\n" + 
+			") t3\n" + 
+			"ON\n" + 
+			"    t1.bill_no = t3.bill_no AND t1.hsn_code = t3.hsn_code\n" + 
+			") t\n" + 
+			"ORDER BY\n" + 
+			"    invoice_no", nativeQuery = true)
+
+	List<GstRegisterItem> getGstRegisterNew(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
+			@Param("frIdList") List<Integer> frIdList);
 
 }

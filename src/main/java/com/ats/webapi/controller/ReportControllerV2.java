@@ -47,7 +47,7 @@ public class ReportControllerV2 {
 
 	@Autowired
 	HSNWiseReportRepo hSNWiseReportRepo;
-	
+
 	@Autowired
 	GrandTotalCreditnoteWiseRepository grandTotalCreditnoteWiseRepository;
 
@@ -93,16 +93,16 @@ public class ReportControllerV2 {
 
 		return saleList;
 	}
-	
-	//Anmol---->5/12/2019--------------->
+
+	// Anmol---->5/12/2019--------------->
 	@RequestMapping(value = { "/getHsnReportFilterGrnGvn" }, method = RequestMethod.POST)
 	public @ResponseBody List<HSNWiseReport> getHsnReportFilterGrnGvn(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate,@RequestParam("grngvnType") List<Integer> grngvnType) {
+			@RequestParam("toDate") String toDate, @RequestParam("grngvnType") List<Integer> grngvnType) {
 
 		List<HSNWiseReport> saleList = new ArrayList<>();
 		try {
 
-			saleList = hSNWiseReportRepo.getReportHsnIn(fromDate, toDate,grngvnType);
+			saleList = hSNWiseReportRepo.getReportHsnIn(fromDate, toDate, grngvnType);
 			System.out.println(saleList.toString());
 
 		} catch (Exception e) {
@@ -119,7 +119,7 @@ public class ReportControllerV2 {
 		List<HSNWiseReport> saleList = new ArrayList<>();
 		try {
 
-			saleList = hSNWiseReportRepo.getReportHsnByFrId(frId,fromDate, toDate);
+			saleList = hSNWiseReportRepo.getReportHsnByFrId(frId, fromDate, toDate);
 			System.out.println(saleList.toString());
 
 		} catch (Exception e) {
@@ -135,53 +135,65 @@ public class ReportControllerV2 {
 
 		List<SalesReport> saleList = new ArrayList<>();
 
-		if (frIdList.contains("-1")) {
-
-			saleList = getSalesReportRepo.getSalesReportAllFr(fromDate, toDate);
-
-		} else {
-
-			saleList = getSalesReportRepo.getSalesReportSpecFr(fromDate, toDate, frIdList);
-		}
+		saleList = getSalesReportRepo.getSalesReportSpecFr(fromDate, toDate, frIdList);
 
 		return saleList;
 	}
 
-	@RequestMapping(value = { "/getGstRegister" }, method = RequestMethod.POST)
-	public @ResponseBody GstRegisterList getGstRegister(@RequestParam("frIdList") List<Integer> frIdList,
+//	@RequestMapping(value = { "/getGstRegister" }, method = RequestMethod.POST)
+//	public @ResponseBody GstRegisterList getGstRegister(@RequestParam("frIdList") List<Integer> frIdList,
+//			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+//
+//		System.err.println("-------------------- IN getGstRegister-----------------------------");
+//
+//		GstRegisterList gstList = new GstRegisterList();
+//
+//		if (frIdList.contains("-1")) {
+//
+//			List<GstRegisterItem> saleList1 = new ArrayList<>();
+//			List<GstRegisterSp> saleList2 = new ArrayList<>();
+//
+//			saleList1 = getGstRegisterItemRepo.getGstRegisterAllFrItem(fromDate, toDate);
+//			gstList.setGstRegItemList(saleList1);
+//
+//			saleList2 = getGstRegisterSpRepo.getGstRegisterAllFrSp(fromDate, toDate);
+//			gstList.setGstRegSpList(saleList2);
+//
+//		} else {
+//
+//			List<GstRegisterItem> saleList1 = new ArrayList<>();
+//			List<GstRegisterSp> saleList2 = new ArrayList<>();
+//
+//			saleList1 = getGstRegisterItemRepo.getGstRegisterSpecFrItem(fromDate, toDate, frIdList);
+//			gstList.setGstRegItemList(saleList1);
+//
+//			saleList2 = getGstRegisterSpRepo.getGstRegisterSpecFrSp(fromDate, toDate, frIdList);
+//			gstList.setGstRegSpList(saleList2);
+//
+//		}
+//		System.err.println("size Item  gstList " + gstList.getGstRegItemList().size());
+//		System.err.println("size Sp  gstList " + gstList.getGstRegSpList());
+//
+//		return gstList;
+//	}
+
+	@RequestMapping(value = { "/getGstRegisterNew" }, method = RequestMethod.POST)
+	public @ResponseBody List<GstRegisterItem> getGstRegisterNew(@RequestParam("frIdList") List<Integer> frIdList,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
-		
-		System.err.println("-------------------- IN getGstRegister-----------------------------");
 
-		GstRegisterList gstList = new GstRegisterList();
+		System.err.println("-------------------- IN getGstRegisterNew-----------------------------");
 
-		if (frIdList.contains("-1")) {
+		List<GstRegisterItem> saleList1 = null;
 
-			List<GstRegisterItem> saleList1 = new ArrayList<>();
-			List<GstRegisterSp> saleList2 = new ArrayList<>();
+		saleList1 = getGstRegisterItemRepo.getGstRegisterNew(fromDate, toDate, frIdList);
 
-			saleList1 = getGstRegisterItemRepo.getGstRegisterAllFrItem(fromDate, toDate);
-			gstList.setGstRegItemList(saleList1);
-
-			saleList2 = getGstRegisterSpRepo.getGstRegisterAllFrSp(fromDate, toDate);
-			gstList.setGstRegSpList(saleList2);
-
-		} else {
-
-			List<GstRegisterItem> saleList1 = new ArrayList<>();
-			List<GstRegisterSp> saleList2 = new ArrayList<>();
-
-			saleList1 = getGstRegisterItemRepo.getGstRegisterSpecFrItem(fromDate, toDate, frIdList);
-			gstList.setGstRegItemList(saleList1);
-
-			saleList2 = getGstRegisterSpRepo.getGstRegisterSpecFrSp(fromDate, toDate, frIdList);
-			gstList.setGstRegSpList(saleList2);
-
+		if (saleList1 == null) {
+			saleList1 = new ArrayList<>();
 		}
-		System.err.println("size Item  gstList " + gstList.getGstRegItemList().size());
-		System.err.println("size Sp  gstList " + gstList.getGstRegSpList());
 
-		return gstList;
+		System.err.println("gstList - " + saleList1);
+
+		return saleList1;
 	}
 
 	@RequestMapping(value = { "/getCrNoteRegister" }, method = RequestMethod.POST)
@@ -191,20 +203,32 @@ public class ReportControllerV2 {
 		CrNoteRegisterList crNoteList = new CrNoteRegisterList();
 
 		List<CrNoteRegItem> crNoteRegItemList;
-		List<CrNoteRegSp> crNoteRegSpList=new ArrayList<CrNoteRegSp>();
-		
+		List<CrNoteRegSp> crNoteRegSpList = new ArrayList<CrNoteRegSp>();
 
 		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItem(fromDate, toDate);
 		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
-		
 
-		//crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSp(fromDate, toDate);
+		// crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSp(fromDate, toDate);
 		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
 
 		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
 		System.err.println("size Sp  crNoteList " + crNoteList.getCrNoteRegSpList());
 
 		return crNoteList;
+	}
+
+	@RequestMapping(value = { "/getCrNoteRegisterNew" }, method = RequestMethod.POST)
+	public @ResponseBody List<CrNoteRegItem> getCrNoteRegisterNew(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+
+		List<CrNoteRegItem> crNoteRegItemList;
+
+		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemNew(fromDate, toDate);
+		if (crNoteRegItemList == null) {
+			crNoteRegItemList = new ArrayList<>();
+		}
+
+		return crNoteRegItemList;
 	}
 
 	// neha
@@ -215,12 +239,13 @@ public class ReportControllerV2 {
 		CrNoteRegisterList crNoteList = new CrNoteRegisterList();
 
 		List<CrNoteRegItem> crNoteRegItemList;
-		List<CrNoteRegSp> crNoteRegSpList=new ArrayList<CrNoteRegSp>();
+		List<CrNoteRegSp> crNoteRegSpList = new ArrayList<CrNoteRegSp>();
 
 		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemByFrId(frId, fromDate, toDate);
 		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
 
-		//crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpByFrId(frId, fromDate, toDate);
+		// crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpByFrId(frId, fromDate,
+		// toDate);
 		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
 
 		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
@@ -231,17 +256,17 @@ public class ReportControllerV2 {
 
 	@RequestMapping(value = { "/getCrNoteRegisterDone" }, method = RequestMethod.POST)
 	public @ResponseBody CrNoteRegisterList getCrNoteRegisterDone(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate,@RequestParam("CreditNoteType") String CreditNoteType) {
+			@RequestParam("toDate") String toDate, @RequestParam("CreditNoteType") String CreditNoteType) {
 
 		CrNoteRegisterList crNoteList = new CrNoteRegisterList();
 
 		List<CrNoteRegItem> crNoteRegItemList;
-		List<CrNoteRegSp> crNoteRegSpList=new ArrayList<>();
+		List<CrNoteRegSp> crNoteRegSpList = new ArrayList<>();
 
-		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemDone(fromDate, toDate,CreditNoteType);
+		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemDone(fromDate, toDate, CreditNoteType);
 		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
 
-		//crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDone(fromDate, toDate);
+		// crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDone(fromDate, toDate);
 		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
 
 		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
@@ -249,17 +274,19 @@ public class ReportControllerV2 {
 
 		return crNoteList;
 	}
-	
+
 	@RequestMapping(value = { "/getGrandTotalCreditnotewise" }, method = RequestMethod.POST)
-	public @ResponseBody List<GrandTotalCreditnoteWise> getGrandTotalCreditnotewise(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate,@RequestParam("creditNoteType") int creditNoteType) {
+	public @ResponseBody List<GrandTotalCreditnoteWise> getGrandTotalCreditnotewise(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("creditNoteType") int creditNoteType) {
 
 		List<GrandTotalCreditnoteWise> tax1ReportList = new ArrayList<>();
 		try {
 			fromDate = Common.convertToYMD(fromDate);
-			toDate = Common.convertToYMD(toDate); 
-			tax1ReportList = grandTotalCreditnoteWiseRepository.getGrandTotalCreditnotewise(fromDate, toDate,creditNoteType);
-			
+			toDate = Common.convertToYMD(toDate);
+			tax1ReportList = grandTotalCreditnoteWiseRepository.getGrandTotalCreditnotewise(fromDate, toDate,
+					creditNoteType);
+
 		} catch (Exception e) {
 			System.out.println(" Exce in Tax1 Report " + e.getMessage());
 			e.printStackTrace();
@@ -275,12 +302,13 @@ public class ReportControllerV2 {
 		CrNoteRegisterList crNoteList = new CrNoteRegisterList();
 
 		List<CrNoteRegItem> crNoteRegItemList;
-		List<CrNoteRegSp> crNoteRegSpList=new ArrayList<CrNoteRegSp>();
+		List<CrNoteRegSp> crNoteRegSpList = new ArrayList<CrNoteRegSp>();
 
 		crNoteRegItemList = getCrNoteRegItemRepo.getCrNoteRegItemDoneByFrId(frId, fromDate, toDate);
 		crNoteList.setCrNoteRegItemList(crNoteRegItemList);
 
-		//crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDoneByFrId(frId, fromDate, toDate);
+		// crNoteRegSpList = getCrNoteRegSpRepo.getCrNoteRegSpDoneByFrId(frId, fromDate,
+		// toDate);
 		crNoteList.setCrNoteRegSpList(crNoteRegSpList);
 
 		System.err.println("size Item  crNoteList " + crNoteList.getCrNoteRegItemList().size());
