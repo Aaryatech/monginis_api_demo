@@ -143,5 +143,38 @@ public class FrSettingController {
 		return info;
 
 	}
+	
+	@RequestMapping(value = { "/updateFrSettingCount" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateFrSettingCount(@RequestParam("frId") int frId,
+			@RequestParam("chSeq") int chSeq) {
+
+		Info info = new Info();
+		int updateResponse = 0;
+		try {
+
+			System.out.println(
+					"Fr setting Para Received for Update /updateFrSetting BillNo " + frId + "billNo " + chSeq);
+			updateResponse = frSettingRepo.updateFrSettingCount(chSeq, frId);
+
+			if (updateResponse > 0) {
+
+				info.setError(false);
+				info.setMessage("success Updating fr seting sell bill no ");
+
+			} else {
+				info.setError(true);
+				info.setMessage("failure");
+			}
+
+		} catch (Exception e) {
+
+			System.out.println(
+					" /updateFrSettingBillNo Exce in Saving/Update fr Setting /FrSettingController " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return info;
+
+	}
 
 }

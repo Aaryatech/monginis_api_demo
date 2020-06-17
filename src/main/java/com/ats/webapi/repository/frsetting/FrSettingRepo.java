@@ -35,5 +35,12 @@ public interface FrSettingRepo extends JpaRepository<FrSetting, Integer> {
 	@Query(" UPDATE FrSetting  SET ex_int=(ex_int+1) "
 			+ " WHERE frId=:frId ")
 	int updateFrSettingSpNo(@Param("frId") int frId);
+	
+	@Transactional
+	@Modifying
+	@Query(" UPDATE FrSetting  SET ex_int1=:chSeq "
+			+ " WHERE frId=:frId ")
+		int updateFrSettingCount(@Param("chSeq") 
+		int chSeq,@Param("frId") int frId);
 
 }

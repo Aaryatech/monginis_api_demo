@@ -33,8 +33,12 @@ public interface ConfigureFrRepository extends JpaRepository<ConfigureFranchisee
 	@Query(" UPDATE ConfigureFranchisee  SET fromTime=:fromTime, toTime=:toTime WHERE  menuId =:menuId")
 	int updateFrConfAllFr(@Param("menuId") int menuId, @Param("fromTime") String fromTime,
 			@Param("toTime") String toTime);
+	ConfigureFranchisee findByFrIdAndMenuIdAndDelStatus(int frId, int menuId, int i);
 
+	@Query(value = "SELECT c.* FROM m_fr_configure c WHERE c.is_del=0 AND c.setting_id IN(SELECT menu_id FROM m_fr_menu_configure WHERE is_del=0 AND fr_id=:frId)", nativeQuery = true)
+	public List<ConfigureFranchisee> getAllFrConfByFrId(@Param("frId") int frId);
 	
-	 ConfigureFranchisee findByFrIdAndMenuIdAndDelStatus(int frId, int menuId, int i);
+	@Query(value = "SELECT c.* FROM m_fr_configure c WHERE c.is_del=0 AND c.cat_id=:catId AND c.setting_id IN(SELECT menu_id FROM m_fr_menu_configure WHERE is_del=0 AND fr_id=:frId)", nativeQuery = true)
+	public List<ConfigureFranchisee> getAllFrConfByFrIdAndCat(@Param("frId") int frId,@Param("catId") int catId);
 
 }

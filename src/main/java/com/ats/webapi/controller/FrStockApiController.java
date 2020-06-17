@@ -31,6 +31,8 @@ import com.ats.webapi.model.FranchiseeList;
 import com.ats.webapi.model.GetCurrentStockDetails;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
+import com.ats.webapi.model.OpsCurStockAndShelfLife;
+import com.ats.webapi.model.OpsFrItemStock;
 import com.ats.webapi.model.PostFrItemStockDetail;
 import com.ats.webapi.model.PostFrItemStockHeader;
 import com.ats.webapi.model.RegularSpecialStockCal;
@@ -39,6 +41,7 @@ import com.ats.webapi.model.StockRegSpPurchase;
 import com.ats.webapi.model.StockRegSpSell;
 import com.ats.webapi.repository.FrStockBetweenMonthRepository;
 import com.ats.webapi.repository.GetFrItemStockConfigurationRepository;
+import com.ats.webapi.repository.OpsCurStockAndShelfLifeRepo;
 import com.ats.webapi.repository.PostFrOpStockDetailRepository;
 import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
 import com.ats.webapi.repository.StockCalculationRepository;
@@ -137,29 +140,27 @@ public class FrStockApiController {
 
 		List<PostFrItemStockHeader> prevStockHeader = new ArrayList<PostFrItemStockHeader>();
 		List<PostFrItemStockDetail> detailList = new ArrayList<PostFrItemStockDetail>();
-		
+
 		try {
-		 prevStockHeader = postFrOpStockHeaderRepository
-				.findByFrIdAndIsMonthClosedAndCatId(frId, 0, catId);
-		 detailList = postFrOpStockDetailRepository
-				.getFrDetail(prevStockHeader.get(0).getOpeningStockHeaderId());
-		for (int i = 0; i < detailList.size(); i++) {
+			prevStockHeader = postFrOpStockHeaderRepository.findByFrIdAndIsMonthClosedAndCatId(frId, 0, catId);
+			detailList = postFrOpStockDetailRepository.getFrDetail(prevStockHeader.get(0).getOpeningStockHeaderId());
+			for (int i = 0; i < detailList.size(); i++) {
 
-			for (int j = 0; j < itemsList.size(); j++) {
+				for (int j = 0; j < itemsList.size(); j++) {
 
-				if (detailList.get(i).getItemId() == itemsList.get(j).getId()) {
-					String itemName = itemsList.get(j).getItemName();
-					String itemCode = itemsList.get(j).getItemId();
+					if (detailList.get(i).getItemId() == itemsList.get(j).getId()) {
+						String itemName = itemsList.get(j).getItemName();
+						String itemCode = itemsList.get(j).getItemId();
 
-					detailList.get(i).setItemName(itemName);
-					detailList.get(i).setItemCode(itemCode);
+						detailList.get(i).setItemName(itemName);
+						detailList.get(i).setItemCode(itemCode);
+
+					}
 
 				}
-
 			}
-		}
-		}catch (Exception e) {
-			System.err.println("Ex in getCurrentOpStock : "+e.getMessage());
+		} catch (Exception e) {
+			System.err.println("Ex in getCurrentOpStock : " + e.getMessage());
 			e.printStackTrace();
 		}
 		return detailList;
@@ -192,25 +193,26 @@ public class FrStockApiController {
 
 		System.out.println(" I/p : currentMonth: " + currentMonth);
 		System.out.println(" I/p : year: " + year);
-        //----------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		Date date=null;
+		Date date = null;
 		try {
 			date = sdf.parse(fromDateTime);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
+
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		
-		int calYear=calendar.get(Calendar.YEAR);
-		int calMonth=calendar.get(Calendar.MONTH)+1;
-		String calFromDateTime=calYear+"-"+calMonth+"-01 00:00:00";
-		System.err.println("********************calFromDateTime*******************"+calFromDateTime+"calMonth"+calMonth+"calYear"+calYear);
-		//---------------------------------------------------------------------------
-		
+
+		int calYear = calendar.get(Calendar.YEAR);
+		int calMonth = calendar.get(Calendar.MONTH) + 1;
+		String calFromDateTime = calYear + "-" + calMonth + "-01 00:00:00";
+		System.err.println("********************calFromDateTime*******************" + calFromDateTime + "calMonth"
+				+ calMonth + "calYear" + calYear);
+		// ---------------------------------------------------------------------------
+
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
 		Date todaysDate = new Date();
@@ -251,7 +253,9 @@ public class FrStockApiController {
 
 			totalPurchaseUptoDateTime = getItemStockService.getTotalPurchaseUptoDateTime(frId, calFromDateTime,
 					fromDateTime, itemId);
-            System.err.println("*****************ITEM ID******************"+itemId+"frId"+frId+"currentMonth"+currentMonth+"year"+year+"catId"+catId+"strFirstDay"+strFirstDay+"fromDateTime"+fromDateTime);
+			System.err.println("*****************ITEM ID******************" + itemId + "frId" + frId + "currentMonth"
+					+ currentMonth + "year" + year + "catId" + catId + "strFirstDay" + strFirstDay + "fromDateTime"
+					+ fromDateTime);
 			postFrItemStockDetail = getItemStockService.getOpeningStock(frId, calMonth, calYear, itemId, catId);
 
 			int regOpStock = postFrItemStockDetail.getRegOpeningStock();
@@ -647,7 +651,7 @@ public class FrStockApiController {
 					System.out.println("fr stock response " + postFrItemStockDetail.toString());
 
 					GetCurrentStockDetails getCurrentStockDetails = new GetCurrentStockDetails();
- 
+
 					getCurrentStockDetails.setStockHeaderId(postFrItemStockDetail.getOpeningStockHeaderId());
 					getCurrentStockDetails.setStockDetailId(postFrItemStockDetail.getOpeningStockDetailId());
 					getCurrentStockDetails.setRegOpeningStock(postFrItemStockDetail.getRegOpeningStock());
@@ -720,6 +724,7 @@ public class FrStockApiController {
 		return stockDetailsList;
 
 	}
+
 	@RequestMapping(value = "/getCurrentStock", method = RequestMethod.POST)
 	public @ResponseBody List<GetCurrentStockDetails> getCurrentStock(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
@@ -736,20 +741,22 @@ public class FrStockApiController {
 		System.out.println("inside rest getCurrentStock : I/p : year: " + year);
 		System.out.println("inside rest getCurrentStock : I/p : itemIdList: " + itemList.toString());
 		try {
-		if(itemList.isEmpty()) {
-			stockDetailsList = stockDetailRepository.getMinOpeningStock1(currentMonth,year,frId,catId,fromDate,toDate,type);
+			if (itemList.isEmpty()) {
+				stockDetailsList = stockDetailRepository.getMinOpeningStock1(currentMonth, year, frId, catId, fromDate,
+						toDate, type);
 
-		}else
-		{
-			stockDetailsList = stockDetailRepository.getMinOpeningStock2(currentMonth,year,frId,catId,fromDate,toDate,type,itemList);
-		}
-     	} catch (Exception e) {
-				e.printStackTrace();
+			} else {
+				stockDetailsList = stockDetailRepository.getMinOpeningStock2(currentMonth, year, frId, catId, fromDate,
+						toDate, type, itemList);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		System.out.println("getCurrentStock Result: " + stockDetailsList.toString());
 
 		return stockDetailsList;
 	}
+
 	// 31-10-2017
 	@RequestMapping(value = { "/updateEndMonth" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateEndMonth(@RequestBody PostFrItemStockHeader postFrItemStockHeader) {
@@ -907,4 +914,31 @@ public class FrStockApiController {
 		return getCurrentMonthOfCatId;
 
 	}
+
+	
+	@Autowired OpsCurStockAndShelfLifeRepo opsCurStockAndShelfLifeRepo;
+	
+	 //GET CURRENT STOCK FOR REGULAR ORDER
+	@RequestMapping(value = "/getOpsFrCurrStockAndShelfLife", method = RequestMethod.POST)
+	public @ResponseBody List<OpsCurStockAndShelfLife> getFrStockAndShelfLife(@RequestParam("frId") int frId,
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("month") int month, @RequestParam("year") int year,
+			@RequestParam("itemList") List<Integer> itemList) {
+
+		List<OpsCurStockAndShelfLife> res = new ArrayList<OpsCurStockAndShelfLife>();
+
+		System.out.println("inside rest getCurrentStock : I/p : frId: " + frId);
+		System.out.println("inside rest getCurrentStock : I/p : fromDate: " + fromDate);
+		System.out.println("inside rest getCurrentStock : I/p : toDate: " + toDate);
+		System.out.println("inside rest getCurrentStock : I/p : currentMonth: " + month);
+		System.out.println("inside rest getCurrentStock : I/p : year: " + year);
+
+		res = opsCurStockAndShelfLifeRepo.getCurrStockAndShelfLife(month, year, frId, fromDate, toDate, itemList);
+
+		System.out.println("OPS FR STOCK Result:  " + res.toString());
+
+		return res;
+
+	}
+
 }

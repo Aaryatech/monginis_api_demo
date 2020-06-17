@@ -40,6 +40,7 @@ import com.ats.webapi.model.phpwebservice.SpecialCakeBean;
 import com.ats.webapi.model.phpwebservice.SpecialCakeBeanList;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.repository.ConfigureFrListRepository;
+import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
@@ -417,11 +418,13 @@ public class RestApiController {
 	RouteMasterRepository routeMasterRepository;
 	@Autowired
 	SellBillDetailRepository sellBillDetailRepository;
-	
-	
+
+	@Autowired
+	ConfigureFrRepository configureFrRepository;
 
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
-	public @ResponseBody Info changeAdminUserPass(@RequestParam int userId, @RequestParam String curPass, @RequestParam String newPass) {
+	public @ResponseBody Info changeAdminUserPass(@RequestParam int userId, @RequestParam String curPass,
+			@RequestParam String newPass) {
 
 		Info info = new Info();
 
@@ -548,7 +551,7 @@ public class RestApiController {
 	public @ResponseBody Info postCreditNoteForUpdate(@RequestBody PostCreditNoteHeaderList postCreditNoteHeader) {
 
 		Info info = new Info();
-        System.err.println("postCreditNoteHeader"+postCreditNoteHeader.toString());
+		System.err.println("postCreditNoteHeader" + postCreditNoteHeader.toString());
 		List<PostCreditNoteHeader> creditNoteHeaderList = postCreditNoteService
 				.postCreditNoteForUpdate(postCreditNoteHeader.getPostCreditNoteHeader());
 
@@ -1293,7 +1296,7 @@ public class RestApiController {
 
 	@Autowired
 	GetBillHeaderRepository getBillHeaderRepository;
-	
+
 	@RequestMapping(value = "/getBillHeader", method = RequestMethod.POST)
 	public @ResponseBody GetBillHeaderList getBillHeader(@RequestParam("frId") List<String> frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
@@ -1317,10 +1320,9 @@ public class RestApiController {
 		GetBillHeader getBillHeader = null;
 		try {
 
-			 
 			getBillHeader = getBillHeaderRepository.getBillHeaderByBillNo(billNo);
 		} catch (Exception e) {
-			 
+
 			e.printStackTrace();
 		}
 
@@ -2078,25 +2080,26 @@ public class RestApiController {
 
 		return frResponse;
 	}
-	
+
 	@Autowired
 	PostBillHeaderRepository postBillHeaderRepository;
-	
+
 	@RequestMapping(value = { "/updateFrInformationinbillheader" }, method = RequestMethod.POST)
 	@ResponseBody
-	public Info updateFrInformationinbillheader(@RequestParam("frId") int frId,@RequestParam("billNo") int billNo) {
+	public Info updateFrInformationinbillheader(@RequestParam("frId") int frId, @RequestParam("billNo") int billNo) {
 
 		Info info = new Info();
-		
+
 		try {
-			Franchisee franchisee=franchiseeRepository.findOne(frId);
+			Franchisee franchisee = franchiseeRepository.findOne(frId);
 			System.out.println(franchisee);
-			int update = postBillHeaderRepository.updatefrinfo(billNo,franchisee.getFrId(),franchisee.getFrCode(),franchisee.getFrName(),franchisee.getFrGstNo(),franchisee.getFrAddress());
+			int update = postBillHeaderRepository.updatefrinfo(billNo, franchisee.getFrId(), franchisee.getFrCode(),
+					franchisee.getFrName(), franchisee.getFrGstNo(), franchisee.getFrAddress());
 			System.out.println(update);
 			info.setError(false);
 			info.setMessage("success");
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			info.setError(true);
 			info.setMessage("failed");
@@ -4975,7 +4978,7 @@ public class RestApiController {
 		return itemResponse;
 
 	}
-	
+
 	/*********************************************************************/
 	@RequestMapping(value = { "/getUserInfoByEmail" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByEmail(@RequestParam String email) {
@@ -4984,7 +4987,7 @@ public class RestApiController {
 		res = userService.checkUniqueEmail(email);
 		return res;
 	}
-	
+
 	@RequestMapping(value = { "/getUserInfoByContact" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByContact(@RequestParam String contact) {
 
@@ -4992,8 +4995,7 @@ public class RestApiController {
 		res = userService.checkUniqueContact(contact);
 		return res;
 	}
-	
-	
+
 	@RequestMapping(value = { "/getUserInfoByUser" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByUser(@RequestParam String uname) {
 
@@ -5001,11 +5003,12 @@ public class RestApiController {
 		res = userService.checkUniqueUser(uname);
 		return res;
 	}
-	
-	static String senderEmail ="atsinfosoft@gmail.com";
-	static String senderPassword ="atsinfosoft@123";
+
+	static String senderEmail = "atsinfosoft@gmail.com";
+	static String senderPassword = "atsinfosoft@123";
 	static String mailsubject = "";
 	String otp1 = null;
+
 	@RequestMapping(value = { "/getUserInfoByUsername" }, method = RequestMethod.POST)
 	public @ResponseBody User getUserInfoByUsername(@RequestParam String username) {
 
@@ -5014,34 +5017,32 @@ public class RestApiController {
 		OTPVerification.setOtp(null);
 		OTPVerification.setPass(null);
 		Info info = new Info();
-		
+
 		User res = new User();
 		res = userService.getUserData(username);
-		System.err.println("Resss-------"+res);
-		
-		if(res!= null) {
+		System.err.println("Resss-------" + res);
+
+		if (res != null) {
 			OTPVerification.setUserId(res.getId());
-			
+
 			String emailId = res.getEmail();
 			String conNumber = res.getContact();
-			
+
 			char[] otp = Common.OTP(6);
 			otp1 = String.valueOf(otp);
 			System.err.println("User otp is" + otp1);
-			
-			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
-			
-			 mailsubject = " OTP  Verification ";
-			 String text = "\n OTP for change your Password: ";
-			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
-					text, otp1);
 
-		
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+
+			mailsubject = " OTP  Verification ";
+			String text = "\n OTP for change your Password: ";
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, otp1);
+
 			OTPVerification.setConNumber(conNumber);
 			OTPVerification.setEmailId(emailId);
 			OTPVerification.setOtp(otp1);
 			OTPVerification.setPass(res.getPassword());
-		}else {
+		} else {
 			System.err.println("In Else ");
 
 			info.setError(true);
@@ -5050,18 +5051,19 @@ public class RestApiController {
 		}
 		return res;
 	}
-	
+
 	@RequestMapping(value = { "/VerifyOTP" }, method = RequestMethod.POST)
 	public @ResponseBody User VerifyOTP(@RequestParam String otp) {
 		Info info = new Info();
-		
-		Object object=new Object();
-		HashMap<Integer, User>  hashMap=new HashMap<>();
-		
-		User user=new User();
-		
+
+		Object object = new Object();
+		HashMap<Integer, User> hashMap = new HashMap<>();
+
+		User user = new User();
+
 		try {
-		//	System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId());
+			// System.err.println("OTP Found------------------"+OTPVerification.getOtp()+"
+			// "+OTPVerification.getUserId());
 			if (otp.equals(OTPVerification.getOtp()) == true) {
 				info.setError(false);
 				info.setMessage("success");
@@ -5070,16 +5072,16 @@ public class RestApiController {
 				String email = OTPVerification.getEmailId();
 				String pass = Common.getAlphaNumericString(7);
 				// System.out.println("pass");
-				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
-				
-				user=userService.findByIdAndDelStatus(OTPVerification.getUserId(),0);
+				// int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+
+				user = userService.findByIdAndDelStatus(OTPVerification.getUserId(), 0);
 				hashMap.put(1, user);
 
 			} else {
 				info.setError(true);
 				info.setMessage("failed");
 			}
-			
+
 		} catch (Exception e) {
 
 			System.err.println("Exce in getAllInstitutes Institute " + e.getMessage());
@@ -5091,12 +5093,12 @@ public class RestApiController {
 		return user;
 
 	}
-	
+
 	@RequestMapping(value = { "/updateToNewPassword" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateToNewPassword(@RequestParam int userId, @RequestParam String newPass) {
 
 		Info res = new Info();
-		
+
 		int a = updateUserRepo.changePassword(userId, newPass);
 		if (a > 0) {
 
@@ -5109,56 +5111,55 @@ public class RestApiController {
 				String emailId = usr.getEmail();
 				String password = "\n Username : " + usr.getUsername() + " \n Password : " + usr.getPassword();
 
-				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
+						password);
 			}
 			res.setError(false);
 			res.setMessage("success");
-		}else {
+		} else {
 			res.setError(true);
 			res.setMessage("fail");
 		}
-	
+
 		return res;
 	}
-	
+
 	/******************************************************************************/
-	//OPS
+	// OPS
 	@RequestMapping(value = { "/getFranchiseeByFrCode" }, method = RequestMethod.POST)
 	@ResponseBody
 	public Franchisee getFranchiseeByFrCode(@RequestParam("frCode") String frCode) {
-	
+
 		OTPVerification.setConNumber(null);
 		OTPVerification.setEmailId(null);
 		OTPVerification.setOtp(null);
 		OTPVerification.setPass(null);
 		Info info = new Info();
-		
+
 		Franchisee franchisee = franchiseeService.getFranchiseeByFrCode(frCode);
 		System.out.println("JsonString" + franchisee);
-		if(franchisee!= null) {
+		if (franchisee != null) {
 			OTPVerification.setUserId(franchisee.getFrId());
-			
+
 			String emailId = franchisee.getFrEmail();
 			String conNumber = franchisee.getFrMob();
-			
+
 			char[] otp = Common.OTP(6);
 			otp1 = String.valueOf(otp);
 			System.err.println("User otp is" + otp1);
-			
-			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
-			
-			 mailsubject = " OTP  Verification ";
-			 String text = "\n OTP for change your Password: ";
-			
-			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword,emailId, mailsubject,
-					text, otp1);
 
-		
+			Info inf = EmailUtility.sendOtp(otp1, conNumber, "MONGII OTP Verification ");
+
+			mailsubject = " OTP  Verification ";
+			String text = "\n OTP for change your Password: ";
+
+			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, otp1);
+
 			OTPVerification.setConNumber(conNumber);
 			OTPVerification.setEmailId(emailId);
 			OTPVerification.setOtp(otp1);
 			OTPVerification.setPass(franchisee.getFrPassword());
-		}else {
+		} else {
 			System.err.println("In Else ");
 
 			info.setError(true);
@@ -5169,18 +5170,19 @@ public class RestApiController {
 		return franchisee;
 
 	}
-	
+
 	@RequestMapping(value = { "/verifyOPSOTP" }, method = RequestMethod.POST)
 	public @ResponseBody Franchisee VerifyOPSOTP(@RequestParam String otp) {
 		Info info = new Info();
-		
-		Object object=new Object();
-		HashMap<Integer, Franchisee>  hashMap=new HashMap<>();
-		
-		Franchisee franchisee=new Franchisee();
-		
+
+		Object object = new Object();
+		HashMap<Integer, Franchisee> hashMap = new HashMap<>();
+
+		Franchisee franchisee = new Franchisee();
+
 		try {
-			//System.err.println("OTP Found------------------"+OTPVerification.getOtp()+" "+OTPVerification.getUserId()+" "+otp);
+			// System.err.println("OTP Found------------------"+OTPVerification.getOtp()+"
+			// "+OTPVerification.getUserId()+" "+otp);
 			if (otp.equals(OTPVerification.getOtp()) == true) {
 				info.setError(false);
 				info.setMessage("success");
@@ -5189,16 +5191,16 @@ public class RestApiController {
 				String email = OTPVerification.getEmailId();
 				String pass = Common.getAlphaNumericString(7);
 				// System.out.println("pass");
-				//int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
-				
-				franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
+				// int res = staffrepo.chagePass(pass, OTPVerification.getUserId());
+
+				franchisee = franchiseeService.findByFrId(OTPVerification.getUserId());
 				hashMap.put(1, franchisee);
 
 			} else {
 				info.setError(true);
 				info.setMessage("failed");
 			}
-			
+
 		} catch (Exception e) {
 
 			System.err.println("Exce in VerifyOPSOTP Institute " + e.getMessage());
@@ -5208,59 +5210,106 @@ public class RestApiController {
 		}
 		return franchisee;
 	}
-	
+
 	@RequestMapping(value = { "/updateToNewOPSPassword" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateToNewOPSPassword(@RequestParam int frId, @RequestParam String newPass) {
 
 		Info res = new Info();
-		
+
 		int a = franchiseeRepository.changeOPSPassword(frId, newPass);
-		if(a>0) {
+		if (a > 0) {
 			int b = franchiseSupRepository.updatePOSFrPwd(frId, newPass);
-			if(b>0) {
-				
-			Franchisee franchisee=franchiseeService.findByFrId(OTPVerification.getUserId());
-				if(franchisee!=null) {
+			if (b > 0) {
+
+				Franchisee franchisee = franchiseeService.findByFrId(OTPVerification.getUserId());
+				if (franchisee != null) {
 					mailsubject = " New Credentials ";
-					String text = "\n Your new username and password are : \n";					
-					
-					String password = "\n Username : " + franchisee.getFrCode() + " \n Password : " + franchisee.getFrPassword();
+					String text = "\n Your new username and password are : \n";
+
+					String password = "\n Username : " + franchisee.getFrCode() + " \n Password : "
+							+ franchisee.getFrPassword();
 					String emailId = franchisee.getFrEmail();
 
-					Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, password);
+					Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
+							password);
 				}
-			res.setError(false);
-			res.setMessage("success");
-			}
-			else {
+				res.setError(false);
+				res.setMessage("success");
+			} else {
 				res.setError(true);
 				res.setMessage("fail");
 			}
-		}else {
+		} else {
 			res.setError(true);
 			res.setMessage("fail");
 		}
-	
+
 		return res;
 	}
-	//Sachin 23-04-2020
+
+	// Sachin 23-04-2020
 	// Get All Items ForItemDetail"
-			@RequestMapping(value = { "/getAllItemsForForItemDetail" }, method = RequestMethod.POST)
-			public @ResponseBody ItemsList findAllItems(@RequestParam int rmId, @RequestParam int rmType) {
-				ItemsList itemsList = itemService.getItemsForItemDetail(rmId, rmType);
-				return itemsList;
-			}
-			
-			@Autowired
-			MiniSubCategoryRepository miniSubCategoryRepository;
-			
-			@RequestMapping(value = { "/showMiniSubCatList" }, method = RequestMethod.GET)
-			@ResponseBody
-			public List<MiniSubCategory> showMiniSubCatList() {
+	@RequestMapping(value = { "/getAllItemsForForItemDetail" }, method = RequestMethod.POST)
+	public @ResponseBody ItemsList findAllItems(@RequestParam int rmId, @RequestParam int rmType) {
+		ItemsList itemsList = itemService.getItemsForItemDetail(rmId, rmType);
+		return itemsList;
+	}
 
-				List<MiniSubCategory> miniSubCategorylist = miniSubCategoryRepository.showMiniSubCatList();
+	@Autowired
+	MiniSubCategoryRepository miniSubCategoryRepository;
 
-				return miniSubCategorylist;
-			}
-	 
+	@RequestMapping(value = { "/showMiniSubCatList" }, method = RequestMethod.GET)
+	@ResponseBody
+	public List<MiniSubCategory> showMiniSubCatList() {
+
+		List<MiniSubCategory> miniSubCategorylist = miniSubCategoryRepository.showMiniSubCatList();
+
+		return miniSubCategorylist;
+	}
+
+	// Get FR Configured By Franchise
+	@RequestMapping(value = { "/getFrConfiguredByFrId" }, method = RequestMethod.POST)
+	public @ResponseBody List<ConfigureFranchisee> getFrConfiguredByFrId(@RequestParam int frId) {
+
+		List<ConfigureFranchisee> frConfList = null;
+		frConfList = configureFrRepository.getAllFrConfByFrId(frId);
+		if (frConfList == null) {
+			frConfList = new ArrayList<>();
+		}
+		return frConfList;
+
+	}
+
+	// Get FR Configured By Franchise And Category
+	@RequestMapping(value = { "/getFrConfiguredByFrIdAndCat" }, method = RequestMethod.POST)
+	public @ResponseBody List<ConfigureFranchisee> getFrConfiguredByFrIdAndCat(@RequestParam int frId,
+			@RequestParam int catId) {
+
+		List<ConfigureFranchisee> frConfList = null;
+		frConfList = configureFrRepository.getAllFrConfByFrIdAndCat(frId, catId);
+		if (frConfList == null) {
+			frConfList = new ArrayList<>();
+		}
+		return frConfList;
+
+	}
+	
+	
+	
+	@RequestMapping(value = { "/getOpsFrPrevOrders" }, method = RequestMethod.POST)
+	public @ResponseBody List<Orders> getOpsFrPrevOrders(@RequestParam String frId,
+			@RequestParam String menuId,@RequestParam String date,@RequestParam List<Integer> itemList) {
+
+		List<Orders> orderList =null;
+		
+		orderList = prevItemOrderService.findFrItemOrders(itemList, frId, date, menuId);
+		
+		if (orderList == null) {
+			orderList = new ArrayList<>();
+		}
+		return orderList;
+
+	}
+	
+
 }

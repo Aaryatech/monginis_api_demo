@@ -17,6 +17,8 @@ public interface FrStockBetweenMonthRepository extends JpaRepository<GetCurrentS
 			+ "COALESCE((SUM(total_sell)),0) AS total_sell FROM m_fr_opening_stock_detail,m_item WHERE m_fr_opening_stock_detail.item_id=m_item.id AND "
 			+ " opening_stock_header_id IN(SELECT opening_stock_header_id FROM m_fr_opening_stock_header WHERE  month BETWEEN :fromMonth AND :toMonth AND fr_id=:frId ) AND m_fr_opening_stock_detail.item_id IN(:itemIdList) GROUP BY item_id", nativeQuery = true)
 	List<GetCurrentStockDetails> getStockBetweenMonths(@Param("frId") int frId,@Param("fromMonth") int fromMonth,@Param("toMonth") int toMonth, @Param("itemIdList") List<Integer> itemIdList);
+	
+	
 	@Query(value = "Select coalesce(b.opening_stock_header_id,0) as opening_stock_header_id,coalesce(b.opening_stock_detail_id,0) as opening_stock_detail_id,coalesce(b.reg_opening_stock,0) as reg_opening_stock,a.item_rate1 as sp_opening_stock,a.item_mrp1  as sp_total_purchase,a.id,a.item_id,a.item_name,\r\n" + 
 			"coalesce(d.grn_grn_qty,0) as reg_total_grn_gvn,coalesce(c.reg,0) as reg_total_purchase,coalesce(e.reg,0) as reg_total_sell,coalesce(e.sp,0) as sp_total_sell,coalesce(f.re_order_qty,0) re_order_qty,\r\n" + 
 			"coalesce(coalesce(((b.reg_opening_stock+c.reg)-(d.grn_grn_qty+e.reg)),((c.reg)-(d.grn_grn_qty+e.reg))),0) current_reg_stock,\r\n" + 
@@ -38,6 +40,8 @@ public interface FrStockBetweenMonthRepository extends JpaRepository<GetCurrentS
 			"(SELECT m_fr_item_stock.item_id,coalesce(m_fr_item_stock.reorder_qty,0) re_order_qty from m_fr_item_stock WHERE m_fr_item_stock.type=:type ) f on a.id=f.item_id ", nativeQuery = true)
 	List<GetCurrentStockDetails> getMinOpeningStock1(@Param("currentMonth")int currentMonth,@Param("year") int year,@Param("frId") int frId,@Param("catId") int catId,@Param("fromDate") String fromDate,
 			@Param("toDate") String toDate,@Param("type") int type);
+	
+	
 	@Query(value = "Select coalesce(b.opening_stock_header_id,0) as opening_stock_header_id,coalesce(b.opening_stock_detail_id,0) as opening_stock_detail_id,coalesce(b.reg_opening_stock,0) as reg_opening_stock,a.item_rate1 as sp_opening_stock,a.item_mrp1  as sp_total_purchase,a.id,a.item_id,a.item_name,\r\n" + 
 			"coalesce(d.grn_grn_qty,0) as reg_total_grn_gvn,coalesce(c.reg,0) as reg_total_purchase,coalesce(e.reg,0) as reg_total_sell,coalesce(e.sp,0) as sp_total_sell,coalesce(f.re_order_qty,0) re_order_qty,\r\n" + 
 			"coalesce(coalesce(((b.reg_opening_stock+c.reg)-(d.grn_grn_qty+e.reg)),((c.reg)-(d.grn_grn_qty+e.reg))),0) current_reg_stock,\r\n" + 
