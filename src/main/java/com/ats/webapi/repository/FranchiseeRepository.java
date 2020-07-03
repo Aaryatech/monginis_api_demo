@@ -22,7 +22,7 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 
 		//public Franchisee findByFrCode(String frCode);
 
-		//public List<Franchisee> findAllByDelStatus(int i);
+		public List<Franchisee> findAllByDelStatus(int i);
 		
 
 		@Modifying
@@ -43,6 +43,7 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		@Transactional
 		@Query("Update Franchisee  SET fr_password=:newPass WHERE fr_id=:frId")
 		public int changeOPSPassword(@Param("frId")int frId,@Param("newPass")String newPass);
-
+		@Query(value="SELECT * FROM `m_franchisee` ORDER BY fr_name ASC",nativeQuery=true)
+		public List<Franchisee> findAllFranchisee();
 		
 	}

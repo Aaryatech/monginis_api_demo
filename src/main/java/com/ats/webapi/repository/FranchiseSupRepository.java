@@ -57,5 +57,14 @@ public interface FranchiseSupRepository extends JpaRepository<FranchiseSup, Inte
 	@Query(value="Update m_franchise_sup SET pass1=:newPass WHERE fr_id=:frId and del_status=0",nativeQuery=true)
 	int updatePOSFrPwd(@Param("frId")int frId,@Param("newPass") String newPass);
 
+	List<FranchiseSup> findByDelStatus(int del);
+
+	/************************************************************************************/
+	@Modifying
+	@Transactional
+	@Query(value="UPDATE m_franchise_sup SET pass2=:weighingScale1Date, pass3=:weighingScale2Date, pass4=:shopEstbLicsDate, pest_control_date=:frAgreementDate, remainder_date=:profTaxDate WHERE fr_id=:frId",nativeQuery=true)
+	int updateFrSupLicsDates(@Param("frId") int frId, @Param("frAgreementDate") String frAgreementDate, @Param("weighingScale1Date") String weighingScale1Date, @Param("weighingScale2Date") String weighingScale2Date,
+			@Param("shopEstbLicsDate") String shopEstbLicsDate, @Param("profTaxDate") String profTaxDate);
+
 	
 }

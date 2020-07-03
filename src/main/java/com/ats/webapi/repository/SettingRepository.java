@@ -20,4 +20,16 @@ public interface SettingRepository extends JpaRepository<Setting, Integer> {
 
 	List<Setting> findBySettingValue(int i);
 
+	@Transactional
+	@Modifying
+	@Query(" UPDATE Setting SET setting_value=:newvalue WHERE setting_key='fr_emp_code'")
+	int udatekeyvalueForFrEmpCode(@Param("newvalue") int newvalue);
+	
+	@Transactional
+	@Modifying
+	@Query(" UPDATE Setting SET setting_value=:newvalue WHERE setting_id=:id")
+	int udatekeyvalueForId(@Param("id") int id,@Param("newvalue") int newvalue);
+
+	Setting findBySettingId(int i);
+	
 }

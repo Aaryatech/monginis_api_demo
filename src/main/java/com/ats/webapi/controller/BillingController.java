@@ -20,6 +20,7 @@ import com.ats.webapi.model.SellBillDetailList;
 import com.ats.webapi.model.SellBillDetails;
 import com.ats.webapi.model.SellBillEditBean;
 import com.ats.webapi.model.SellBillHeader;
+import com.ats.webapi.model.TransactionDetail;
 import com.ats.webapi.model.bill.ExpressBillService;
 import com.ats.webapi.model.bill.GetItemHsnCode;
 import com.ats.webapi.model.bill.SlabwiseBill;
@@ -30,6 +31,7 @@ import com.ats.webapi.repository.SellBillDetailEditRepository;
 import com.ats.webapi.repository.SellBillDetailRepository;
 import com.ats.webapi.repository.SellBillDetailsRepository;
 import com.ats.webapi.repository.SlabwiseDetailsRepository;
+import com.ats.webapi.repository.TransactionDetailRepository;
 import com.ats.webapi.repository.UpdateSellBillTimeStampRepo;
 
 @RestController
@@ -55,6 +57,9 @@ public class BillingController {
 	
 	@Autowired
 	SellBillDetailEditRepository sellBillDetailEditRepository;
+	
+	@Autowired
+	TransactionDetailRepository transactionDetailRepository;
 	
 	@RequestMapping(value = { "/updateSellBillTimeStamp" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateSellBillTimeStamp(@RequestParam("sellBillNo") int sellBillNo,
@@ -224,4 +229,49 @@ public class BillingController {
 		}
 		return hsnwiseBills;
 	}
+	
+	@RequestMapping(value = { "/deleteTransactionDetails" }, method = RequestMethod.POST)
+	public @ResponseBody int deleteTransactionDetails(@RequestParam("sellBillNo") int sellBillNo) {
+
+		int response = transactionDetailRepository.deleteTransactionDetails(sellBillNo);
+
+		return response;
+	}
+
+	@RequestMapping(value = { "/deleteTransactionDetailsByIsAdvAmt" }, method = RequestMethod.POST)
+	public @ResponseBody int deleteTransactionDetailsByIsAdvAmt(@RequestParam("sellBillNo") int sellBillNo,
+			@RequestParam("advAmtStatus") int advAmtStatus) {
+
+		int response = transactionDetailRepository.deleteTransactionDetailsByIsAdvAmt(sellBillNo, advAmtStatus);
+
+		return response;
+	}
+
+	@RequestMapping(value = { "/getAdvAmtTransaction" }, method = RequestMethod.POST)
+	public @ResponseBody TransactionDetail getAdvAmtTransaction(@RequestParam("sellBillNo") int sellBillNo) {
+
+		TransactionDetail transactionDetailRes = transactionDetailRepository.getAdvAmtTransaction(sellBillNo);
+
+		return transactionDetailRes;
+	}
+	
+	
+	@RequestMapping(value = { "/deleteSellBillDetailByItemId" }, method = RequestMethod.POST)
+	public @ResponseBody int deleteSellBillDetailByItemId(@RequestParam("sellBillNo") int sellBillNo,
+			@RequestParam("itemId") int itemId) {
+
+		int response = sellBillDetailRepository.deleteSellBillDetailByItemId(sellBillNo, itemId);
+
+		return response;
+	}
+	
+	@RequestMapping(value = { "/getTransactionByBillId" }, method = RequestMethod.POST)
+	public @ResponseBody TransactionDetail getTransactionByBillId(@RequestParam("sellBillNo") int sellBillNo) {
+
+		TransactionDetail transactionDetailRes = transactionDetailRepository.getTransactionByBillId(sellBillNo);
+
+		return transactionDetailRes;
+	}
+	
+	
 }

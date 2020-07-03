@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 		String dbPassword = null;
         LoginResponse loginResponse=null;
 		try {
-			user = userRepository.findByUsername(username);
+			user = userRepository.findByUsernameAndDelStatus(username, 0);
 			dbUsername = user.getUsername();
 			dbPassword = user.getPassword();
 		} catch (Exception e) {
@@ -182,7 +182,8 @@ public class UserServiceImpl implements UserService {
 	 
 		return getUserTypeRepository.getType();
 	}
-/********************************************************************************/
+	
+	/********************************************************************************/
 	@Override
 	public User checkUniqueEmail(String email) {
 		// TODO Auto-generated method stub
@@ -218,6 +219,11 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findById(userId);
 	}
-	
-	
+
+	@Override
+	public User getUserDataByMobileNo(String mob) {
+		return userRepository.findBycontact(mob);
+		
+	}
+
 }

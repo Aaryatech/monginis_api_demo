@@ -241,5 +241,66 @@ public class EmailUtility {
 		
 		return info;
 	}
+	
+public static Info sendOtp1(String OTP, String phoneNo) {
+		
+		Info info=new Info();
+		
+		try {
+			   
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			String msg = "We welcome You to Madhvi!\n"+
+						 "Your OTP to change your password is ("+OTP+").";
+						 
+			String message = msg;
+			String mob = phoneNo.trim();
+		
+			String sms = restTemplate.getForObject("https://smsapi.24x7sms.com/api_2.0/SendSMS.aspx?APIKEY=pJMAaVPuGbh&MobileNo="+mob+"&SenderID=MADHVI&Message="+message+"&ServiceName=TEMPLATE_BASED", String.class);
+		
+			info.setError(false);
+			info.setMessage(sms);
+		  
+		}catch (Exception e) {
+			
+			info.setError(true);
+			info.setMessage("sendMsg");
+		}
+		
+		return info;
+	}
+
+public static Info send(String phoneNo, String msg) {
+	
+	Info info=new Info();
+	
+	try {
+		   
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
+//		String msg = "We welcome You to Madhvi!\n"+
+//					 "Your OTP to change your password is ("+OTP+").";
+					 
+		String message = msg;
+		String mob = phoneNo.trim();
+	
+		String sms = restTemplate.getForObject("https://smsapi.24x7sms.com/api_2.0/SendSMS.aspx?APIKEY=pJMAaVPuGbh&MobileNo="+mob+"&SenderID=MADHVI&Message="+message+"&ServiceName=TEMPLATE_BASED", String.class);
+	
+		info.setError(false);
+		info.setMessage(sms);
+		System.err.println("SMS Resp : "+info);
+	  
+	}catch (Exception e) {
+		
+		info.setError(true);
+		info.setMessage("sendMsg");
+		System.err.println("SMS Resp : "+info);
+		System.err.println("SMS Ex : "+e.getMessage());			
+	}
+	
+	return info;
+}
 
 }

@@ -19,7 +19,7 @@ public interface UserService {
 	public List<Department> getAllDept();
 
 	public List<GetUserType> getAllUserType();
-
+	
 	public User checkUniqueEmail(String email);
 
 	public User checkUniqueContact(String contact);
@@ -31,5 +31,7 @@ public interface UserService {
 	public User checkUniqueUser(String uname);
 
 	public User findByUserId(int userId);
+
+	public User getUserDataByMobileNo(String mob);
 
 }

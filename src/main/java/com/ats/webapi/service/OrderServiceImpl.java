@@ -152,6 +152,101 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return itemOrderList;
 	}
+	
+
+	
+	
+	@Override
+	public ItemOrderList searchAdvOrderHistory(int advHeadId, Date deliveryDate, int frId) {
+		List<ItemOrderHis> orderList = null;
+		ErrorMessage errorMessage;
+		ItemOrderList itemOrderList;
+		try {
+			
+			 
+				orderList = itemOrderHisRepository.findByMenuIdInAndDeliveryDateAllForAdv(advHeadId,deliveryDate, frId);
+
+			 
+			if (orderList == null) {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderList();
+
+				errorMessage.setError(true);
+				errorMessage.setMessage("Orders Not Found");
+
+				itemOrderList.setErrorMessage(errorMessage);
+			} else {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderList();
+
+				errorMessage.setError(false);
+				errorMessage.setMessage("Orders found Successfully");
+
+				itemOrderList.setItemOrderList(orderList);
+				itemOrderList.setErrorMessage(errorMessage);
+
+			}
+
+		} catch (Exception e) {
+			itemOrderList = new ItemOrderList();
+			errorMessage = new ErrorMessage();
+
+			errorMessage.setError(true);
+			errorMessage.setMessage("Orders Not Found(EXC)");
+
+			itemOrderList.setErrorMessage(errorMessage);
+		}
+		return itemOrderList;
+	}
+	
+	
+	@Override
+	public ItemOrderList searchAdvOrderHistoryForAdmin(int advHeadId) {
+		List<ItemOrderHis> orderList = null;
+		ErrorMessage errorMessage;
+		ItemOrderList itemOrderList;
+		try {
+			
+			 
+				orderList = itemOrderHisRepository.findByMenuIdInAndDeliveryDateAllForAdv(advHeadId);
+				
+				System.err.println("orderList------------------------------------- "+orderList);
+
+			 
+			if (orderList == null) {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderList();
+
+				errorMessage.setError(true);
+				errorMessage.setMessage("Orders Not Found");
+
+				itemOrderList.setErrorMessage(errorMessage);
+			} else {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderList();
+
+				errorMessage.setError(false);
+				errorMessage.setMessage("Orders found Successfully");
+
+				itemOrderList.setItemOrderList(orderList);
+				itemOrderList.setErrorMessage(errorMessage);
+
+			}
+
+		} catch (Exception e) {
+			itemOrderList = new ItemOrderList();
+			errorMessage = new ErrorMessage();
+
+			errorMessage.setError(true);
+			errorMessage.setMessage("Orders Not Found(EXC)");
+
+			itemOrderList.setErrorMessage(errorMessage);
+		}
+		return itemOrderList;
+	}
+	
+	 
+	
 
 	// new Update order method for billing
 	@Override

@@ -29,13 +29,12 @@ public class SellBillDetail implements Serializable{
 	
 	@Column(name="item_id")
 	private int itemId;
-	
 
 	@Column(name="mrp")
 	private float mrp;
 	
 	@Column(name="qty")
-	private int qty;
+	private float qty;
 	
 	@Column(name="mrp_base_rate")
 	private float mrpBaseRate;
@@ -61,6 +60,12 @@ public class SellBillDetail implements Serializable{
 	@Column(name="igst_rs")
 	private float igstRs;
 	
+	@Column(name="disc_per")
+	private float discPer;//new
+	
+	@Column(name="disc_amt")
+	private float discAmt;//new
+	
 	@Column(name="total_tax")
 	private float totalTax;
 	
@@ -76,6 +81,40 @@ public class SellBillDetail implements Serializable{
 	@Column(name="bill_stock_type")
 	private int billStockType;
 	
+	
+	@Column(name="ext_float1")
+	private float extFloat1;
+	
+	@Column(name="ext_var1")
+	private String extVar1;
+	
+	
+	
+	
+	public String getExtVar1() {
+		return extVar1;
+	}
+
+	public void setExtVar1(String extVar1) {
+		this.extVar1 = extVar1;
+	}
+
+	public float getDiscPer() {
+		return discPer;
+	}
+
+	public void setDiscPer(float discPer) {
+		this.discPer = discPer;
+	}
+
+	public float getDiscAmt() {
+		return discAmt;
+	}
+
+	public void setDiscAmt(float discAmt) {
+		this.discAmt = discAmt;
+	}
+
 	public int getSellBillDetailNo() {
 		return sellBillDetailNo;
 	}
@@ -125,11 +164,11 @@ public class SellBillDetail implements Serializable{
 		this.mrp = mrp;
 	}
 
-	public int getQty() {
+	public float getQty() {
 		return qty;
 	}
 
-	public void setQty(int qty) {
+	public void setQty(float qty) {
 		this.qty = qty;
 	}
 
@@ -229,14 +268,29 @@ public class SellBillDetail implements Serializable{
 		this.delStatus = delStatus;
 	}
 
+	public float getExtFloat1() {
+		return extFloat1;
+	}
+
+	public void setExtFloat1(float extFloat1) {
+		this.extFloat1 = extFloat1;
+	}
+	
+	
+
 	@Override
 	public String toString() {
 		return "SellBillDetail [sellBillDetailNo=" + sellBillDetailNo + ", sellBillNo=" + sellBillNo + ", catId="
 				+ catId + ", itemId=" + itemId + ", mrp=" + mrp + ", qty=" + qty + ", mrpBaseRate=" + mrpBaseRate
 				+ ", taxableAmt=" + taxableAmt + ", sgstPer=" + sgstPer + ", sgstRs=" + sgstRs + ", cgstPer=" + cgstPer
-				+ ", cgstRs=" + cgstRs + ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", totalTax=" + totalTax
-				+ ", grandTotal=" + grandTotal + ", remark=" + remark + ", delStatus=" + delStatus + "]";
+				+ ", cgstRs=" + cgstRs + ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", discPer=" + discPer
+				+ ", discAmt=" + discAmt + ", totalTax=" + totalTax + ", grandTotal=" + grandTotal + ", remark="
+				+ remark + ", delStatus=" + delStatus + ", billStockType=" + billStockType + ", extFloat1=" + extFloat1
+				+ ", extVar1=" + extVar1 + "]";
 	}
+	
+	
+
 	
 	
 }
