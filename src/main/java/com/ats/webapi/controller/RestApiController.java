@@ -3324,7 +3324,17 @@ public class RestApiController {
 		return frMenusList;
 
 	}
+	@RequestMapping(value = { "/frEmpById" }, method = RequestMethod.POST)
+	@ResponseBody
+	public String frEmpById(@RequestParam("empId") int empId, @RequestParam("frId") int frId) {
 
+		String jsonFr = franchiseeService.findFrEmployeeByEmpId(empId, frId);
+		System.out.println("JsonString" + jsonFr);
+
+		return jsonFr;
+
+	}
+	
 	@RequestMapping(value = "/getFrMenus", method = RequestMethod.POST)
 	public @ResponseBody List<ConfigureFranchisee> getFr(@RequestParam int frId) {
 
