@@ -323,6 +323,7 @@ public class PettyCashApiController {
 			
 			list = frEmpRepo.findByFrId(frId);
 			System.err.println("List-----------" + list);
+			
 		} catch (Exception e) {
 			System.err.println("Exception in getAllFrEmpByFrid : " + e.getMessage());
 			e.printStackTrace();
@@ -354,7 +355,7 @@ public class PettyCashApiController {
 			frEmp = frEmpRepo.save(emp);
 			if (id == 0) {
 				if (frEmp != null) {
-					Setting setting = settingRepository.findBySettingId(57);
+					Setting setting = settingRepository.findBySettingId(52);
 					int val = setting.getSettingValue() + 1;
 
 					int value = settingRepository.udatekeyvalueForFrEmpCode(val);
@@ -737,4 +738,25 @@ public class PettyCashApiController {
 
 		return crnReport;
 	}
+	
+	@RequestMapping(value = "/getSettingDataById", method = RequestMethod.GET)
+	public @ResponseBody Setting getSettingDataById(@RequestParam("settingId") int settingId) {
+
+		Setting Updatevalue = settingRepository.findBySettingId(settingId);
+
+		return Updatevalue;
+
+	}
+	
+	
+	@RequestMapping(value = "/getSettingValueById", method = RequestMethod.POST)
+	public @ResponseBody Setting getSettingValueById(@RequestParam("settingId") int settingId) {
+
+		Setting Updatevalue = settingRepository.findBySettingId(settingId);
+
+		return Updatevalue;
+
+	}
+	
+	
 }
