@@ -230,6 +230,15 @@ public class BillingController {
 		return hsnwiseBills;
 	}
 	
+	@RequestMapping(value = { "/saveTransactionDetail" }, method = RequestMethod.POST)
+	public @ResponseBody List<TransactionDetail> saveTransactionDetail(
+			@RequestBody List<TransactionDetail> transactionDetail) {
+
+		List<TransactionDetail> transactionDetailRes = transactionDetailRepository.save(transactionDetail);
+
+		return transactionDetailRes;
+	}
+	
 	@RequestMapping(value = { "/deleteTransactionDetails" }, method = RequestMethod.POST)
 	public @ResponseBody int deleteTransactionDetails(@RequestParam("sellBillNo") int sellBillNo) {
 
