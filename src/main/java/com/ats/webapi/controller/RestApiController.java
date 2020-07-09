@@ -3872,6 +3872,17 @@ public class RestApiController {
 		}
 		return "" + JsonUtil.javaToJson(info);
 	}
+	
+	@RequestMapping(value = "/getSpecialCakeSupById")
+	public @ResponseBody SpCakeSupplement getSpCakeSupById(@RequestParam int spId) {
+		SpCakeSupplement spSup = new SpCakeSupplement();
+		try {
+			spSup = specialcakeService.getSpCakeSupById(spId);
+		} catch (Exception e) {
+			System.out.println("error in deleting special cake" + e.getMessage());	
+		}
+		return spSup;
+	}
 
 	/*
 	 * @RequestMapping(value = { "/getOrderList" }, method = RequestMethod.POST)

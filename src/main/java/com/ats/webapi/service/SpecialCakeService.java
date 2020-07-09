@@ -22,4 +22,6 @@ public interface SpecialCakeService {
 	public List<SpecialCake> findSpecialCakes(List<Integer> spId);
 	public SearchSpCakeResponse searchSpecialCakeBySpId(int spId);
 	public List<SpecialCake> showAllSpecialCakeOrderBySpCode();
+	
+	public SpCakeSupplement getSpCakeSupById(int spId);
 }

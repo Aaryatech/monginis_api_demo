@@ -204,6 +204,8 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 		
 		return spList;
 	}
+	
+	
 
 	@Override
 	public SearchSpCakeResponse searchSpecialCakeBySpId(int spId) {
@@ -231,6 +233,12 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 		}
 		
 		return searchSpCakeResponse;
+	}
+
+	@Override
+	public SpCakeSupplement getSpCakeSupById(int spId) {
+		SpCakeSupplement spSup = spCakeSupRepository.findBySpId(spId);
+		return spSup;
 	}
 	
 
