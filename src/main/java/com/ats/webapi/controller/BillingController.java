@@ -61,6 +61,7 @@ public class BillingController {
 	@Autowired
 	TransactionDetailRepository transactionDetailRepository;
 	
+	
 	@RequestMapping(value = { "/updateSellBillTimeStamp" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateSellBillTimeStamp(@RequestParam("sellBillNo") int sellBillNo,
 			@RequestParam("timeStamp") String timeStamp) {

@@ -155,6 +155,11 @@ public class AdvanceOrderApiController {
 		AdvanceOrderHeader orderList = new AdvanceOrderHeader();
 		try {
 			orderList = advanceOrderHeaderRepo.findByAdvHeaderIdAndDelStatus(headId, 0);
+			
+			if(orderList==null) {
+				orderList = new AdvanceOrderHeader();
+			}
+			
 		} catch (Exception e) {
 			System.out.println("Exc in advanceOrderHistoryHeader" + e.getMessage());
 			e.printStackTrace();

@@ -9,5 +9,6 @@ public interface CategoryService {
 
 	public List<MCategory> findAllCategory();
 	
-
+	List<MCategory> findAllOnlyCategory(List<Integer> list);
+	
 }

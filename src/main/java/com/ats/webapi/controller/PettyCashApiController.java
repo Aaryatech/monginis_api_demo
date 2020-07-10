@@ -759,4 +759,12 @@ public class PettyCashApiController {
 	}
 	
 	
+	@RequestMapping(value = { "/deletePettyCashData" }, method = RequestMethod.POST)
+	public @ResponseBody int deletePettyCashData(@RequestParam("id") int id) {
+
+		int res = pettyRepo.deletePettyCashDataById(id);
+
+		return res;
+	}
+	
 }

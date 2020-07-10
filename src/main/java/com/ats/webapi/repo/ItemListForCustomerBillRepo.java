@@ -19,7 +19,7 @@ public interface ItemListForCustomerBillRepo extends JpaRepository<ItemListForCu
 			+ "  m_item_sup.item_id=m_item.id and  t_adv_order_detail.adv_header_id =:advHeadId AND t_adv_order_detail.item_id = m_item.id AND t_adv_order_detail.del_status = 0", nativeQuery = true)
 	List<ItemListForCustomerBill> getItem(@Param("advHeadId") int advHeadId);
 
-	@Query(value = "SELECT d.item_id, d.mrp_base_rate as rate, d.mrp AS orignal_mrp, d.qty, i.item_name, i.item_tax1 as tax_per,i.ext_int2 as is_decimal,s.item_uom as uom, 0 as taxable_amt,0 as tax_amt,0 as total FROM t_sell_bill_detail d, m_item i,m_item_sup s WHERE s.item_id=i.id and d.sell_bill_no =:sellBillNo AND d.item_id = i.id AND d.del_status = 0 ", nativeQuery = true)
+	@Query(value = "SELECT d.item_id, d.mrp_base_rate as rate, d.mrp AS orignal_mrp, d.qty, i.item_name, i.item_tax1 as tax_per,0 as is_decimal,s.item_uom as uom, 0 as taxable_amt,0 as tax_amt,0 as total FROM t_sell_bill_detail d, m_item i,m_item_sup s WHERE s.item_id=i.id and d.sell_bill_no =:sellBillNo AND d.item_id = i.id AND d.del_status = 0 ", nativeQuery = true)
 	List<ItemListForCustomerBill> getItemByBill(@Param("sellBillNo") int sellBillNo);
 
 }

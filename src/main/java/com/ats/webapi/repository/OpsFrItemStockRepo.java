@@ -33,7 +33,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"    FROM\r\n" + 
 	 		"        m_item i\r\n" + 
 	 		"    WHERE\r\n" + 
-	 		"        i.del_status = 0 AND is_stockable=1\r\n" + 
+	 		"        i.del_status = 0 \r\n" + 
 	 		") t1\r\n" + 
 	 		"LEFT JOIN(\r\n" + 
 	 		"    SELECT d.*,\r\n" + 
@@ -71,7 +71,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"    FROM\r\n" + 
 	 		"        m_item i\r\n" + 
 	 		"    WHERE\r\n" + 
-	 		"        i.del_status = 0 AND is_stockable=1\r\n" + 
+	 		"        i.del_status = 0 \r\n" + 
 	 		")\r\n" + 
 	 		"GROUP BY\r\n" + 
 	 		"    h.fr_id,\r\n" + 
@@ -92,7 +92,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"        FROM\r\n" + 
 	 		"            m_item i\r\n" + 
 	 		"        WHERE\r\n" + 
-	 		"            i.del_status = 0 AND is_stockable=1\r\n" + 
+	 		"            i.del_status = 0 \r\n" + 
 	 		"    )\r\n" + 
 	 		"GROUP BY\r\n" + 
 	 		"    p.item_id\r\n" + 
@@ -112,7 +112,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"        FROM\r\n" + 
 	 		"            m_item i\r\n" + 
 	 		"        WHERE\r\n" + 
-	 		"            i.del_status = 0 AND is_stockable=1\r\n" + 
+	 		"            i.del_status = 0 \r\n" + 
 	 		"    ) AND grn_gvn_date BETWEEN :fromDate AND :toDate\r\n" + 
 	 		"GROUP BY\r\n" + 
 	 		"    fr_id,\r\n" + 
@@ -150,7 +150,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"            FROM\r\n" + 
 	 		"                m_item i\r\n" + 
 	 		"            WHERE\r\n" + 
-	 		"                i.del_status = 0 AND is_stockable=1\r\n" + 
+	 		"                i.del_status = 0 \r\n" + 
 	 		"        ) AND del_status = 0\r\n" + 
 	 		"    ) a\r\n" + 
 	 		"LEFT JOIN(\r\n" + 
@@ -177,7 +177,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"        FROM\r\n" + 
 	 		"            m_item i\r\n" + 
 	 		"        WHERE\r\n" + 
-	 		"            i.del_status = 0 AND i.is_stockable=1\r\n" + 
+	 		"            i.del_status = 0 \r\n" + 
 	 		"    ) AND del_status = 0\r\n" + 
 	 		") AND t_sell_bill_detail.sell_bill_no IN(\r\n" + 
 	 		"    SELECT\r\n" + 
@@ -209,7 +209,7 @@ public interface OpsFrItemStockRepo extends JpaRepository<OpsFrItemStock ,Intege
 	 		"        FROM\r\n" + 
 	 		"            m_item i\r\n" + 
 	 		"        WHERE\r\n" + 
-	 		"            i.del_status = 0 AND i.is_stockable=1\r\n" + 
+	 		"            i.del_status = 0 \r\n" + 
 	 		"    ) AND m_fr_item_stock.type = :frStockType\r\n" + 
 	 		") t7\r\n" + 
 	 		"ON\r\n" + 

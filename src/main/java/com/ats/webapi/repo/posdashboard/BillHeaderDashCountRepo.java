@@ -24,6 +24,6 @@ public interface BillHeaderDashCountRepo extends JpaRepository<BillHeaderDashCou
 			"FROM\n" + 
 			"    t_bill_header " + 
 			"WHERE\n" + 
-			"    t_bill_header.del_status = 0 AND t_bill_header.fr_id =:frId AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate  AND is_dairy_mart=1", nativeQuery = true)
+			"    t_bill_header.del_status = 0 AND t_bill_header.fr_id =:frId AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate ", nativeQuery = true)
 	BillHeaderDashCount getD1ataFordash2pur(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("frId") int  frId);
 }

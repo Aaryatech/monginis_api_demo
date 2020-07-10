@@ -31,6 +31,9 @@ public class SubCategory implements Serializable{
 	private int catId;
 	@Column(name="del_status")
 	private int delStatus;	
+	
+	@Column(name="seq_no")
+	private int seqNo;	
 	//----remove to do onetomany association mapping-------
 	public int getCatId() {
 		return catId;
@@ -51,8 +54,16 @@ public class SubCategory implements Serializable{
 	public void setCatId(MCategory catId) {
 		this.catId = catId;
 	}*/
+	
+	
 	public int getSubCatId() {
 		return subCatId;
+	}
+	public int getSeqNo() {
+		return seqNo;
+	}
+	public void setSeqNo(int seqNo) {
+		this.seqNo = seqNo;
 	}
 	public void setSubCatId(int subCatId) {
 		this.subCatId = subCatId;
@@ -69,12 +80,12 @@ public class SubCategory implements Serializable{
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
+	
 	@Override
 	public String toString() {
 		return "SubCategory [subCatId=" + subCatId + ", subCatName=" + subCatName + ", catId=" + catId + ", delStatus="
-				+ delStatus + "]";
+				+ delStatus + ", seqNo=" + seqNo + "]";
 	}
-    
 	
 	
 }

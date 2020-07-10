@@ -15,76 +15,77 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "m_item")
 public class Item implements Serializable {
-	
-	
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
 
-	@Column(name="item_id")
+	@Column(name = "item_id")
 	private String itemId;
-	
-	@Column(name="item_name")
+
+	@Column(name = "item_name")
 	private String itemName;
 
-	@Column(name="item_grp1")
+	@Column(name = "item_grp1")
 	private String itemGrp1;
-	
-	@Column(name="item_grp2")
+
+	@Column(name = "item_grp2")
 	private String itemGrp2;
-	
-	@Column(name="item_grp3")
+
+	@Column(name = "item_grp3")
 	private String itemGrp3;
-	
-	@Column(name="item_rate1")
+
+	@Column(name = "item_rate1")
 	private double itemRate1;
-	
-	@Column(name="item_rate2")
+
+	@Column(name = "item_rate2")
 	private double itemRate2;
-	
-	@Column(name="item_mrp1")
+
+	@Column(name = "item_mrp1")
 	private double itemMrp1;
-	
-	@Column(name="item_mrp2")
+
+	@Column(name = "item_mrp2")
 	private double itemMrp2;
-	
-	@Column(name="item_mrp3")
+
+	@Column(name = "item_mrp3")
 	private double itemMrp3;
-	
-	@Column(name="item_image")
+
+	@Column(name = "item_image")
 	private String itemImage;
-	
-	@Column(name="item_tax1")
+
+	@Column(name = "item_tax1")
 	private double itemTax1;
-	
-	@Column(name="item_tax2")
+
+	@Column(name = "item_tax2")
 	private double itemTax2;
-	
-	@Column(name="item_tax3")
+
+	@Column(name = "item_tax3")
 	private double itemTax3;
-	
-	@Column(name="item_is_used")
+
+	@Column(name = "item_is_used")
 	private int itemIsUsed;
-	
-	@Column(name="item_sort_id")
+
+	@Column(name = "item_sort_id")
 	private double itemSortId;
-	
-	@Column(name="grn_two")
+
+	@Column(name = "grn_two")
 	private int grnTwo;
-	
-	@Column(name="del_status")
+
+	@Column(name = "del_status")
 	private int delStatus;
-		
-	@Column(name="item_rate3")
+
+	@Column(name = "item_rate3")
 	private double itemRate3;
-	
-	@Column(name="min_qty")
+
+	@Column(name = "min_qty")
 	private int minQty;
-	
-	@Column(name="item_shelf_life")
+
+	@Column(name = "item_shelf_life")
 	private int shelfLife;
+
+	
 
 	public double getItemRate3() {
 		return itemRate3;
@@ -105,10 +106,7 @@ public class Item implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
 
-	
-	
 	public double getItemMrp3() {
 		return itemMrp3;
 	}
@@ -269,6 +267,7 @@ public class Item implements Serializable {
 		this.shelfLife = shelfLife;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", itemId=" + itemId + ", itemName=" + itemName + ", itemGrp1=" + itemGrp1
@@ -279,7 +278,5 @@ public class Item implements Serializable {
 				+ ", delStatus=" + delStatus + ", itemRate3=" + itemRate3 + ", minQty=" + minQty + ", shelfLife="
 				+ shelfLife + "]";
 	}
-
-	
 
 }

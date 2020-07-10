@@ -27,6 +27,7 @@ import com.ats.webapi.commons.Common;
 import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
+import com.ats.webapi.model.bill.ItemListForCustomerBill;
 import com.ats.webapi.model.frsetting.FrSetting;
 import com.ats.webapi.model.grngvn.GetGrnGvnForCreditNoteList;
 import com.ats.webapi.model.grngvn.GrnGvnHeader;
@@ -39,6 +40,7 @@ import com.ats.webapi.model.phpwebservice.GetLogin;
 import com.ats.webapi.model.phpwebservice.SpecialCakeBean;
 import com.ats.webapi.model.phpwebservice.SpecialCakeBeanList;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
+import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourRepository;
@@ -65,6 +67,7 @@ import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
 import com.ats.webapi.repository.RouteMasterRepository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SellBillDetailRepository;
+import com.ats.webapi.repository.SellBillHeaderRepository;
 import com.ats.webapi.repository.SettingRepository;
 import com.ats.webapi.repository.SpCakeOrderHisRepository;
 import com.ats.webapi.repository.SpCakeOrderUpdateRepository;
@@ -418,9 +421,16 @@ public class RestApiController {
 	RouteMasterRepository routeMasterRepository;
 	@Autowired
 	SellBillDetailRepository sellBillDetailRepository;
+	
+	@Autowired
+	SellBillHeaderRepository sellBillHeaderRepository;
+
 
 	@Autowired
 	ConfigureFrRepository configureFrRepository;
+	
+	@Autowired
+	ItemListForCustomerBillRepo itemListForCustomerBillRepo;
 
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestParam int userId, @RequestParam String curPass,
@@ -5332,5 +5342,185 @@ public class RestApiController {
 
 	}
 	
+	@RequestMapping(value = { "/findAllOnlyCategory" }, method = RequestMethod.GET)
+	public @ResponseBody CategoryList findAllOnlyCategory() {
+		List<Integer> list = new ArrayList<>();
+		list.add(2);
+		list.add(0);
+		List<MCategory> jsonCategoryResponse = categoryService.findAllOnlyCategory(list);
+		CategoryList categoryList = new CategoryList();
+		ErrorMessage errorMessage = new ErrorMessage();
+		errorMessage.setError(false);
+		errorMessage.setMessage("Success");
+		categoryList.setErrorMessage(errorMessage);
+		categoryList.setmCategoryList(jsonCategoryResponse);
 
+		return categoryList;
+	}
+
+	@RequestMapping(value = { "/findAllCatForStock" }, method = RequestMethod.GET)
+	public @ResponseBody CategoryList findAllBySameDay() {
+		List<Integer> list = new ArrayList<>();
+		list.add(0);
+		list.add(1);
+		List<MCategory> jsonCategoryResponse = categoryService.findAllOnlyCategory(list);
+		CategoryList categoryList = new CategoryList();
+		ErrorMessage errorMessage = new ErrorMessage();
+		errorMessage.setError(false);
+		errorMessage.setMessage("Success");
+		categoryList.setErrorMessage(errorMessage);
+		categoryList.setmCategoryList(jsonCategoryResponse);
+
+		return categoryList;
+	}
+
+	@RequestMapping(value = "/getItemsNameByIdWithOtherItemCateIdOrSubCatId", method = RequestMethod.POST)
+	public @ResponseBody ItemResponse getItemsNameByIdWithOtherItemCateIdOrSubCatId(
+			@RequestParam List<Integer> itemList, @RequestParam int frId, @RequestParam int searchBy,
+			@RequestParam int catId) {
+
+		ItemResponse itemResponse = new ItemResponse();
+		ErrorMessage errorMessage = new ErrorMessage();
+		List<Item> items = new ArrayList<>();
+
+		if (searchBy == 1) {
+			items = itemRepository.getItemsNameByIdWithOtherItemCateId(7, frId, catId);
+		} else if (searchBy == 2) {
+			items = itemRepository.getItemsNameByIdWithOtherItemSubCatId(7, frId, catId);
+		}
+
+		System.err.println("ITEMS - " + items);
+
+		if (items != null) {
+			itemResponse.setItemList(items);
+			errorMessage.setError(false);
+			errorMessage.setMessage("Success");
+		} else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("No Items Found");
+		}
+		return itemResponse;
+
+	}
+	
+	@RequestMapping(value = "/getItemsNameByCatIdForPos", method = RequestMethod.POST)
+	public @ResponseBody ItemResponse getItemsNameByCatIdForPos(
+			@RequestParam List<Integer> itemList, @RequestParam int catId) {
+
+		ItemResponse itemResponse = new ItemResponse();
+		ErrorMessage errorMessage = new ErrorMessage();
+		List<Item> items = new ArrayList<>();
+
+			items = itemRepository.getItemsByCatIdForPos(catId);
+
+		System.err.println("ITEMS - " + items);
+
+		if (items != null) {
+			itemResponse.setItemList(items);
+			errorMessage.setError(false);
+			errorMessage.setMessage("Success");
+		} else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("No Items Found");
+		}
+		return itemResponse;
+
+	}
+	
+	
+	@RequestMapping(value = "/getAllItemsForPos", method = RequestMethod.POST)
+	public @ResponseBody ItemResponse getAllItemsForPos(
+			@RequestParam List<Integer> itemList) {
+
+		ItemResponse itemResponse = new ItemResponse();
+		ErrorMessage errorMessage = new ErrorMessage();
+		List<Item> items = new ArrayList<>();
+
+			items = itemRepository.getAllItemsForPos();
+
+		System.err.println("ITEMS - " + items);
+
+		if (items != null) {
+			itemResponse.setItemList(items);
+			errorMessage.setError(false);
+			errorMessage.setMessage("Success");
+		} else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("No Items Found");
+		}
+		return itemResponse;
+
+	}
+	
+	
+
+	@RequestMapping("/getSellBillItemsBySellBillNoForEdit")
+	public @ResponseBody SellBillHeader getBillHeaderById(@RequestParam int sellBillNo) throws ParseException {
+		SellBillHeader res = null;
+		System.err.println("sellBillNo-------- is ---------" + sellBillNo);
+		try {
+			res = sellBillHeaderRepository.getBillHeaderById(sellBillNo);
+
+			System.err.println("data is" + res.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exc in getBillHeaderById" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return res;
+
+	}
+	
+	@RequestMapping("/getBillItemsBySellBillNo")
+	public @ResponseBody List<ItemListForCustomerBill> getBillItemsBySellBillNo(@RequestParam int sellBillNo)
+			throws ParseException {
+		List<ItemListForCustomerBill> itm = null;
+		System.err.println("sellBillNo-------- is ---------" + sellBillNo);
+		try {
+			itm = itemListForCustomerBillRepo.getItemByBill(sellBillNo);
+
+			for (int i = 0; i < itm.size(); i++) {
+				ItemListForCustomerBill temp = itm.get(i);
+
+				float total = temp.getOrignalMrp() * temp.getQty();
+				Float taxableAmt = (total * 100) / (100 + temp.getTaxPer());
+				temp.setTaxAmt(total - taxableAmt);
+				temp.setTaxableAmt(taxableAmt);
+				temp.setTotal(total);
+
+			}
+
+			System.err.println("data is" + itm.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exc in getBillItemsBySellBillNo" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return itm;
+
+	}
+	
+	
+	@RequestMapping("/getSellBillDetailListByHeaderId")
+	public @ResponseBody List<SellBillDetail> getSellBillDetailListByHeaderId(@RequestParam int sellBillNo)
+			throws ParseException {
+		List<SellBillDetail> itm = null;
+		System.err.println("sellBillNo-------- is ----SellBillDetail-----" + sellBillNo);
+		try {
+			itm = sellBillDetailRepository.getSellBillDetailListByHeaderId(sellBillNo);
+
+			System.err.println("data is" + itm.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exc in getSellBillDetailListByHeaderId" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return itm;
+
+	}
+
+	
 }

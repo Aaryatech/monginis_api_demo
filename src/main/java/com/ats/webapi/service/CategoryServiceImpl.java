@@ -28,5 +28,14 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		return mCategoryList;
 	}
+	
+	@Override
+	public List<MCategory> findAllOnlyCategory(List<Integer> list) {
+		
+		List<MCategory> mCategoryList=categoryRepository.findByDelStatusAndIsSameDayInOrderBySeqNoAsc(0,list);
+		
+		 
+		return mCategoryList;
+	}
 		
 }
