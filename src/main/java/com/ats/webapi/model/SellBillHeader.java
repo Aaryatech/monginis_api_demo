@@ -110,6 +110,9 @@ public class SellBillHeader implements Serializable{
 	@Column(name="ext_float1")
 	private int extFloat1;
 	
+	@Column(name="ext_int2")
+	private int extInt2;
+	
 	@Column(name="ext_var1")
 	private String extVar1;
 	
@@ -380,8 +383,14 @@ public class SellBillHeader implements Serializable{
 	public void setPayableAmt(float payableAmt) {
 		this.payableAmt = payableAmt;
 	}
-	
-	
+
+	public int getExtInt2() {
+		return extInt2;
+	}
+
+	public void setExtInt2(int extInt2) {
+		this.extInt2 = extInt2;
+	}
 
 	@Override
 	public String toString() {
@@ -394,10 +403,9 @@ public class SellBillHeader implements Serializable{
 				+ ", userPhone=" + userPhone + ", status=" + status + ", isDairyMartBill=" + isDairyMartBill
 				+ ", couponNo=" + couponNo + ", custLoyaltyPtRate=" + custLoyaltyPtRate + ", custLoyaltyPt="
 				+ custLoyaltyPt + ", delStatus=" + delStatus + ", billType=" + billType + ", extInt1=" + extInt1
-				+ ", extFloat1=" + extFloat1 + ", extVar1=" + extVar1 + ", sellBillDetailsList=" + sellBillDetailsList
-				+ "]";
+				+ ", extFloat1=" + extFloat1 + ", extInt2=" + extInt2 + ", extVar1=" + extVar1
+				+ ", sellBillDetailsList=" + sellBillDetailsList + "]";
 	}
-	
 	
 
 }

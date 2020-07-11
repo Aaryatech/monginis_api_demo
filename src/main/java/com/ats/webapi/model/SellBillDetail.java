@@ -91,6 +91,8 @@ public class SellBillDetail implements Serializable{
 	@Column(name="ext_var2")
 	private String extVar2;
 	
+	@Column(name="ext_int1")
+	private int extInt1;
 	
 	
 	public String getExtVar1() {
