@@ -34,7 +34,9 @@ import com.ats.webapi.model.rawmaterial.RmItemGroup;
 import com.ats.webapi.model.rawmaterial.RmItemSubCatList;
 import com.ats.webapi.model.rawmaterial.RmItemSubCategory;
 import com.ats.webapi.model.rawmaterial.RmRateVerification;
+import com.ats.webapi.repository.GetRawMaterialByGroupRepository;
 import com.ats.webapi.repository.RawMaterialDetailsRepository;
+import com.ats.webapi.repository.RmItemGroupRepostitory;
 import com.ats.webapi.repository.RmRateVerificationListRepository;
 import com.ats.webapi.service.rawmaterial.RawMaterialService;
 
@@ -48,6 +50,51 @@ public class RawMaterialApiCotroller {
 	RawMaterialDetailsRepository rawMaterialDetailsRepository;
 	@Autowired
 	RmRateVerificationListRepository rmRateVerificationListRepository;
+	
+	//Sachin 09-12-2020
+	@Autowired
+	GetRawMaterialByGroupRepository getRawMaterialByGroupRepository;
+	@Autowired
+	RmItemGroupRepostitory rmItemGroupRepostitory;
+	
+	@RequestMapping(value = { "/getRawMaterialDetailByGroupSupp" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetRawMaterialByGroup> getRawMaterialDetailByGroupSupp(@RequestParam ("grpId")int grpId,@RequestParam ("suppId")int suppId)
+	{
+		List<GetRawMaterialByGroup> getRawMaterialByGroupList=getRawMaterialByGroupRepository.getRawMaterialDetailByGroupSupp(grpId,suppId);
+		return getRawMaterialByGroupList;
+		 
+		
+	}
+	@RequestMapping(value = { "/getRmItemGroup" }, method = RequestMethod.POST)
+	public @ResponseBody List<RmItemGroup> getRmItemGroup(@RequestParam("suppId")int suppId)
+	{
+		List<RmItemGroup> rmItemGroupList=rmItemGroupRepostitory.getGroupBySupp(suppId);
+		return rmItemGroupList;
+	}
+	@RequestMapping(value = { "/getItemSfHeadersByDept" }, method = RequestMethod.GET)
+	public @ResponseBody ItemSfHeaderList getItemSfHeadersByDept(int deptId)
+	{
+		List<ItemSfHeader> itemSfHeaders=rawMaterialService.getItemSfHeadersByDept(deptId);
+		
+		ItemSfHeaderList itemSfHeaderList=new ItemSfHeaderList();
+		
+		ErrorMessage errorMessage=new ErrorMessage();
+		if(itemSfHeaders!=null)
+		{
+			errorMessage.setError(false);
+			errorMessage.setMessage("ItemSfHeader List  Found successFully");
+			itemSfHeaderList.setErrorMessage(errorMessage);
+			itemSfHeaderList.setItemSfHeaderList(itemSfHeaders);
+		}
+		else
+		{
+			errorMessage.setError(true);
+			errorMessage.setMessage("ItemSfHeader List Not Found.");
+			itemSfHeaderList.setErrorMessage(errorMessage);
+		}
+		return itemSfHeaderList;
+	}
+	
 	//----------------------Get Data Of Raw Material Item Categories---------------
 	@RequestMapping(value = { "/showRmItemCategories" }, method = RequestMethod.GET)
 	public @ResponseBody RmItemCatList showRmItemCategories() {

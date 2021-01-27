@@ -15,4 +15,9 @@ public interface GetRawMaterialByGroupRepository extends JpaRepository<GetRawMat
 			"m_rm_item_sub_cat s,m_rm_tax t where t.tax_id=r.tax_id AND r.grp_id=g.grp_id AND r.cat_id=c.cat_id AND s.sub_cat_id=r.sub_cat_id AND r.grp_id=:grpId AND r.del_status=0 ",nativeQuery=true)
 	List<GetRawMaterialByGroup> getRmByGroup(@Param("grpId") int grpId);
 
+	@Query(value="select r.rm_id, r.rm_name, r.tax_id, r.grp_id, g.grp_name, r.cat_id, c.cat_name, r.sub_cat_id,s.sub_cat_name, r.rm_pack_qty, r.rm_rate, r.rm_is_critical,r.rm_rol_qty as bms_rol_qty,r.rm_received_qty as store_rol_qty,t.sgst_per,t.cgst_per,t.igst_per from m_rm r, m_rm_item_cat c, m_rm_item_group g,\r\n" + 
+			"		m_rm_item_sub_cat s,m_rm_tax t where t.tax_id=r.tax_id AND r.grp_id=g.grp_id AND r.cat_id=c.cat_id AND s.sub_cat_id=r.sub_cat_id AND r.grp_id=:grpId  AND r.del_status=0 and r.rm_id IN(select rm_id from m_rm_rate_verif where supp_id=:suppId and grp_id=:grpId)",nativeQuery=true)
+	List<GetRawMaterialByGroup> getRawMaterialDetailByGroupSupp(@Param("grpId")int grpId,@Param("suppId") int suppId);
+
+	
 }

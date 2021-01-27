@@ -706,6 +706,27 @@ public class RawMaterialServiceImpl implements RawMaterialService{
 		}
 		return errorMessage;
 	}
+
+	@Override
+	public List<RawMaterialDetails> getAllRawMaterialByDept(int deptId) {
+		List<RawMaterialDetails> rawMaterialMasterDetailList=rawMaterialDetailsRepository.findByDelStatusAndRmOpRate(0,deptId);
+		if(rawMaterialMasterDetailList!=null)
+		{
+			System.out.println("RM  Details List : "+rawMaterialMasterDetailList.toString());
+		}
+		else
+		{
+			System.out.println("Raw material  Not exist");
+		}
+		return rawMaterialMasterDetailList;
+	}
+
+	@Override
+	public List<ItemSfHeader> getItemSfHeadersByDept(int deptId) {
+List<ItemSfHeader> itemSfHeaders=itemSfHeaderRepository.findItemSfHeaderByDelStatusAndInt1(0,deptId);
+		
+		return itemSfHeaders;
+	}
 	
 	
 }

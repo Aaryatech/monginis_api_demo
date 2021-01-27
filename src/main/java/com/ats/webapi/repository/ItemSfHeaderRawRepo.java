@@ -10,4 +10,6 @@ public interface ItemSfHeaderRawRepo  extends JpaRepository<ItemSfHeader, Intege
 	
 	List<ItemSfHeader>  findItemSfHeaderByDelStatus(int delStatus);
 
+	List<ItemSfHeader> findItemSfHeaderByDelStatusAndInt1(int i, int deptId);
+
 }
