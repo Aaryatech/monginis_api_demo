@@ -69,10 +69,10 @@
 			<version>1.9.13</version>
 		</dependency>
 	
-	   <dependency>
+	   <!-- <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
-       </dependency>
+       </dependency> -->
 
 <!-- https://mvnrepository.com/artifact/com.ganyo/gcm-server -->
         <dependency>
