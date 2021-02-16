@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 public class AccessRightModule {
 
 	
-	
+	    
 	/*
 	 `module_id` int(11) NOT NULL AUTO_INCREMENT,
 	  `module_name` text NOT NULL,
